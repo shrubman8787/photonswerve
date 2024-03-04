@@ -62,8 +62,8 @@ public class UpperSub extends SubsystemBase{
     public void configShooter() {
         leftShooter.restoreFactoryDefaults();
         rightShooter.restoreFactoryDefaults();
-        leftShooter.setIdleMode(IdleMode.kBrake);
-        rightShooter.setIdleMode(IdleMode.kBrake);
+        leftShooter.setIdleMode(IdleMode.kCoast);
+        rightShooter.setIdleMode(IdleMode.kCoast);
     }
 
     // elbow

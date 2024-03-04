@@ -42,8 +42,8 @@ public class AutoSwerve extends Command{
     @Override
     public boolean isFinished() {
         if(
-            Math.abs(x - swerve.getPose().getX()) < 0.03 &&
-            Math.abs(y - swerve.getPose().getY()) < 0.03 &&
+            Math.abs(x - swerve.getPose().getX()) < 0.02 &&
+            Math.abs(y - swerve.getPose().getY()) < 0.02 &&
             Math.abs(z - swerve.getPose().getRotation().getRotations()) < 0.005
         )  return true;
         return false;

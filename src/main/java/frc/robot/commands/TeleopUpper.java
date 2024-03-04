@@ -41,12 +41,14 @@ public class TeleopUpper extends Command{
     @Override
     public void execute() {
 
-        if(controller.getYButtonPressed()) state = state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND;
-        if(controller.getXButtonPressed()) state = state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP;
-        if(controller.getAButtonPressed()) state = state == UpperState.SPEAKER ? UpperState.DEFAULT : UpperState.SPEAKER;
-        if(controller.getRightTriggerAxis() > 0.01) state = UpperState.SHOOT;
-        if(controller.getRightTriggerAxis() < 0.01 && state == UpperState.SHOOT) state = UpperState.TELE;
-        if(controller.getStartButtonPressed()) state = state == UpperState.ENDGAME ? UpperState.DEFAULT : UpperState.ENDGAME;
+        if(state != UpperState.TELE) {
+            if(controller.getYButtonPressed()) state = state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND;
+            if(controller.getXButtonPressed()) state = state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP;
+            if(controller.getAButtonPressed()) state = state == UpperState.SPEAKER ? UpperState.DEFAULT : UpperState.SPEAKER;
+            if(controller.getRightTriggerAxis() > 0.01) state = UpperState.SHOOT;
+            if(controller.getRightTriggerAxis() < 0.01 && state == UpperState.SHOOT) state = UpperState.TELE;
+            if(controller.getStartButtonPressed()) state = state == UpperState.ENDGAME ? UpperState.DEFAULT : UpperState.ENDGAME;
+        }
 
         if(controller.getLeftBumperPressed()) state = state == UpperState.TELE ? UpperState.DEFAULT : UpperState.TELE;
 
