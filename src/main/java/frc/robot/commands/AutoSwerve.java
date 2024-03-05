@@ -22,7 +22,6 @@ public class AutoSwerve extends Command{
 
     @Override
     public void initialize() {
-        System.out.println("AutoSwerve.initialize()");
     }
 
     @Override
@@ -36,7 +35,6 @@ public class AutoSwerve extends Command{
     @Override
     public void end(boolean interrupted) {
         swerve.drive(new Translation2d(0, 0), 0, true, false);
-        System.out.println("AutoSwerve.end()");
     }
 
     @Override

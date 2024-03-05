@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = new Autos().X2(m_Swerve, m_upper, m_vision);
+    m_autonomousCommand = new Autos().X2Y2Z3_r(m_Swerve, m_upper, m_vision);
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.ChenryLib.PID;
@@ -44,7 +42,6 @@ public class AutoUpper extends Command{
 
     @Override
     public void initialize() {
-        System.out.println("AutoUpper.initialize()");
         lastTime = Timer.getFPGATimestamp();
     }
 
@@ -87,7 +84,6 @@ public class AutoUpper extends Command{
         s_Upper.setElbow(0);
         s_Upper.setShooter(0);
         s_Upper.setIntake(0);
-        System.out.println("AutoUpper.end()");
     }
 
     @Override
