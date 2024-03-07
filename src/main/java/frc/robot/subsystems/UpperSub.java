@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LedContants;
+import frc.robot.Constants;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.robotConstants;
 
@@ -30,8 +30,8 @@ public class UpperSub extends SubsystemBase{
 
     private final CANcoder elbowCancoder = new CANcoder(UpperConstants.elbowCancoderID, robotConstants.canbusName);
 
-    private final AddressableLED led = new AddressableLED(LedContants.ledPwmPort);
-    private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(LedContants.ledLenfth);
+    private final AddressableLED led = new AddressableLED(UpperConstants.ledPwmPort);
+    private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(UpperConstants.ledLength);
 
     private final DigitalInput leftLimitSwitch = new DigitalInput(UpperConstants.LeftLimitSwitchID);
     private final DigitalInput rightLimitSwitch = new DigitalInput(UpperConstants.rightLimitSwitchID);
@@ -47,7 +47,7 @@ public class UpperSub extends SubsystemBase{
 
         configElbow();
 
-        led.setLength(LedContants.ledLenfth);
+        led.setLength(UpperConstants.ledLength);
         setLED(0,0,0);
         led.start();
     }
@@ -114,7 +114,7 @@ public class UpperSub extends SubsystemBase{
 
     public void setShooter(double speed) {
         leftShooter.set(speed);
-        rightShooter.set(speed);
+        rightShooter.set(speed * (Constants.UpperConstants.leftShooterRPM / Constants.UpperConstants.rightShooterRPM)); // brute force attack
     }
 
     // LED
@@ -128,6 +128,26 @@ public class UpperSub extends SubsystemBase{
         if(timer.get() < 0.1) setLED(r, g, b);
         else if(timer.get() < 0.2) setLED(0, 0, 0);
         else timer.restart();
+    }
+
+    public void gayPride() {
+        int counter = 0;
+        boolean oneTime = false;
+        timer.start();
+        if(timer.get() < 0.1) {
+            oneTime = false;
+            for(int i=0;i<buffer.getLength();i++) {
+                if(i%6 == (5+counter)%6)  buffer.setRGB(i, 255, 0, 255);
+                else if (i%6 == (0+counter)%6)  buffer.setRGB(i, 255, 0, 0);
+                else if (i%6 == (1+counter)%6)  buffer.setRGB(i, 255, 255, 0);
+                else if (i%6 == (2+counter)%6)  buffer.setRGB(i, 0, 255, 0);
+                else if (i%6 == (3+counter)%6)  buffer.setRGB(i, 0, 255, 255);
+                else if (i%6 == (4+counter)%6)  buffer.setRGB(i, 0, 0, 255);
+            }
+        } else if (timer.get() >= 0.1 && !oneTime) {
+            counter++;
+            oneTime = true;
+        } else timer.restart();
     }
 
     // limitSwitch

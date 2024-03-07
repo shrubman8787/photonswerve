@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -31,17 +34,21 @@ public final class Constants {
     public static final int DriverControllerID = 0;
   }
 
-  public enum UpperState {
+  public static enum UpperState {
     DEFAULT,
     GROUND,
     AMP,
-    SPEAKER,
+    BASE,
+    AUTO,
+    TRANSPORT,
     SHOOT,
     TELE,
     ENDGAME
   }
 
-  public static final class Swerve {
+  public static UpperState state;
+
+  public static final class SwerveConstants {
     public static final double axisDeadBand = 0.05; // make sure ur robot won't vibrate cuz the joystick gives a input like 0.002 or sth
     public static final int pigeon1 = 13; // advanced gyro
     public static final int pigeon2 = 14;
@@ -78,6 +85,13 @@ public final class Constants {
     /* Angle Motor PID Values */
     public static final double angleKP = 0.01;
     public static final double angleKD = 0.0; // maybe need to adjust
+
+    /* Angle Motor Auto-Facing PID Values */
+    public static final double faceKP = 0.025;
+    public static final double faceKI = 0.0;
+    public static final double faceKD = 0.01;
+    public static final double faceiWindup = 0.0;
+    public static final double faceiLimit = 0;
 
     /* Drive Motor PID Values */
     public static final double driveKP = 0.12;
@@ -173,7 +187,6 @@ public final class Constants {
   }
 
   public static final class UpperConstants {
-
     public static final int rightLimitSwitchID = 8;
     public static final int LeftLimitSwitchID = 7;
 
@@ -186,6 +199,8 @@ public final class Constants {
     // public static final int shooterCancoderID = 1;
 
     public static final double shooter_arm_Angle = 135;
+    public static final double leftShooterRPM = 5450; 
+    public static final double rightShooterRPM = 5350; 
 
     public static final double elbowKP = 10;
     public static final double elbowKI = 0.0;
@@ -202,7 +217,8 @@ public final class Constants {
     public static final double ELBOW_DEFAULT_POS = -0.002197;
     public static final double ELBOW_GROUND_POS = -0.236328;
     public static final double ELBOW_AMP_POS = 0.012939;
-    public static final double ELBOW_SPEAKER_POS = -0.204589;
+    public static final double ELBOW_BASE_POS = -0.204589;
+    public static final double ELBOW_TRANSPORT_POS = -0.142387; // need to test
 
     public static final double INTAKE_GROUND_SPEED = 0.3;
     public static final double INTAKE_SHOOT_SPEED = 1;
@@ -212,12 +228,98 @@ public final class Constants {
     public static final double SHOOTER_LEGAL_SPEED = 5000;
 
     public static boolean teleMode = false;
-  }
-  
 
-  public static final class LedContants {
-    public static final int ledLenfth = 31;
+    public static final int ledLength = 31;
     public static final int ledPwmPort = 7;
   }
 
+  public static final class FieldConstants {
+    
+
+    public static final Map<Translation2d, Double> autoAimDataBlue = new HashMap<>(){{
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0); 
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+    }};
+
+    public static final Map<Translation2d, Double> autoAimDataRed = new HashMap<>(){{
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+      put(new Translation2d(0, 0), 0.0);
+    }};
+  }
 }

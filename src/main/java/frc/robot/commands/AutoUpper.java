@@ -57,8 +57,8 @@ public class AutoUpper extends Command{
                     else s_Upper.blink(12,41,235);
                     if(s_Upper.hasNote()) state = UpperState.DEFAULT;
                     break;
-                case SPEAKER:
-                    elbowAngle = UpperConstants.ELBOW_SPEAKER_POS;
+                case BASE:
+                    elbowAngle = UpperConstants.ELBOW_BASE_POS;
                     intakeSpeed = 0;
                     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                     if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(255,0,0);

@@ -30,20 +30,20 @@ public class Swerve extends SubsystemBase {
   public SwerveModule[] mSwerveMods;
 
   public Swerve() {
-    gyro1 = new Pigeon2(Constants.Swerve.pigeon1, robotConstants.canbusName);
-    gyro2 = new Pigeon2(Constants.Swerve.pigeon2, robotConstants.canbusName);
-    gyro3 = new Pigeon2(Constants.Swerve.pigeon3, robotConstants.canbusName);
-    gyro4 = new Pigeon2(Constants.Swerve.pigeon4, robotConstants.canbusName);
+    gyro1 = new Pigeon2(Constants.SwerveConstants.pigeon1, robotConstants.canbusName);
+    gyro2 = new Pigeon2(Constants.SwerveConstants.pigeon2, robotConstants.canbusName);
+    gyro3 = new Pigeon2(Constants.SwerveConstants.pigeon3, robotConstants.canbusName);
+    gyro4 = new Pigeon2(Constants.SwerveConstants.pigeon4, robotConstants.canbusName);
     zeroGyro();
 
-    swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), pos);
+    swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.swerveKinematics, getYaw(), pos);
 
     mSwerveMods =
       new SwerveModule[] {
-        new SwerveModule(0, Constants.Swerve.Mod0.constants),
-        new SwerveModule(1, Constants.Swerve.Mod1.constants),
-        new SwerveModule(2, Constants.Swerve.Mod2.constants),
-        new SwerveModule(3, Constants.Swerve.Mod3.constants)
+        new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
+        new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
+        new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
+        new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
       };
   }
 
@@ -55,10 +55,10 @@ public class Swerve extends SubsystemBase {
   };
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+    SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
       fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, getYaw())
                     : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
     for (SwerveModule mod : mSwerveMods) {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -67,7 +67,7 @@ public class Swerve extends SubsystemBase {
 
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.SwerveConstants.maxSpeed);
 
     for (SwerveModule mod : mSwerveMods) {
       mod.setDesiredState(desiredStates[mod.moduleNumber], false);
@@ -89,12 +89,12 @@ public class Swerve extends SubsystemBase {
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
 
-    SwerveModuleState[] targetStates = frc.robot.Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+    SwerveModuleState[] targetStates = frc.robot.Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(targetStates);
   }
 
   public ChassisSpeeds getSpeeds() {
-    return frc.robot.Constants.Swerve.swerveKinematics.toChassisSpeeds(getStates());
+    return frc.robot.Constants.SwerveConstants.swerveKinematics.toChassisSpeeds(getStates());
   }
 
   public SwerveModuleState[] getStates() {
@@ -127,7 +127,7 @@ public class Swerve extends SubsystemBase {
     StatusSignal<Double> gyro3Yaw = gyro3.getYaw();
     StatusSignal<Double> gyro4Yaw = gyro4.getYaw();
     double averageAngle = (gyro1Yaw.getValue() + gyro2Yaw.getValue() + gyro3Yaw.getValue() + gyro4Yaw.getValue()) / 4;
-    return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - averageAngle) : Rotation2d.fromDegrees(averageAngle);
+    return (Constants.SwerveConstants.invertGyro) ? Rotation2d.fromDegrees(360 - averageAngle) : Rotation2d.fromDegrees(averageAngle);
   }
 
   @Override

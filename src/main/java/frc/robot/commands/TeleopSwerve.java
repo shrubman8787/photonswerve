@@ -7,9 +7,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.VisionSub;
 
 public class TeleopSwerve extends Command {
   private Swerve s_Swerve;
+  private VisionSub s_Vision;
   private XboxController driver;
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
@@ -20,32 +22,31 @@ public class TeleopSwerve extends Command {
   private double strafeVal;
   private double rotationVal;
 
-  public TeleopSwerve(Swerve s_Swerve, XboxController controller) {
+  public TeleopSwerve(Swerve s_Swerve, VisionSub s_Vision, XboxController controller) {
     this.s_Swerve = s_Swerve;
+    this.s_Vision = s_Vision;
     this.driver = controller;
     addRequirements(s_Swerve);
   }
 
   @Override
   public void execute() {
-    /* Get Values, Deadband*/
-    translationVal =
-        translationLimiter.calculate(
-            MathUtil.applyDeadband(driver.getLeftY(), Constants.
-            Swerve.axisDeadBand));
-    strafeVal =
-        strafeLimiter.calculate(
-            MathUtil.applyDeadband(driver.getLeftX(), Constants.Swerve.axisDeadBand));        
-    rotationVal =
-        rotationLimiter.calculate(
-            MathUtil.applyDeadband(driver.getRightX() * 0.5, Constants.Swerve.axisDeadBand));
+    /* Get Values, Deadband */
+    translationVal = translationLimiter.calculate(
+        MathUtil.applyDeadband(driver.getLeftY(), Constants.SwerveConstants.axisDeadBand));
+    strafeVal = strafeLimiter.calculate(
+        MathUtil.applyDeadband(driver.getLeftX(), Constants.SwerveConstants.axisDeadBand));
+    rotationVal = s_Vision.hasTarget() ? s_Vision.calculateAutoFacing()
+        : rotationLimiter
+            .calculate(MathUtil.applyDeadband(driver.getRightX() * 0.5, Constants.SwerveConstants.axisDeadBand));
 
-    if (driver.getBackButton()) s_Swerve.zeroGyro();
+    if (driver.getBackButton())
+      s_Swerve.zeroGyro();
 
     /* Drive */
     s_Swerve.drive(
-        new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-        rotationVal * Constants.Swerve.maxAngularVelocity, true,
+        new Translation2d(translationVal, strafeVal).times(Constants.SwerveConstants.maxSpeed),
+        rotationVal * Constants.SwerveConstants.maxAngularVelocity, true,
         true);
   }
 }
