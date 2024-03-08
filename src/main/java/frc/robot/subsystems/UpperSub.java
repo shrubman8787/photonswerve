@@ -20,8 +20,8 @@ import frc.robot.Constants.robotConstants;
 
 public class UpperSub extends SubsystemBase{
         
-    private final TalonFX leftElbow = new TalonFX(UpperConstants.leftElbowMotorID, robotConstants.canbusName);
-    private final TalonFX rightElbow = new TalonFX(UpperConstants.rightElbowMotorID, robotConstants.canbusName);
+    private final TalonFX leftElbow = new TalonFX(UpperConstants.leftElbowMotorID);
+    private final TalonFX rightElbow = new TalonFX(UpperConstants.rightElbowMotorID);
     
     private final CANSparkMax leftShooter = new CANSparkMax(UpperConstants.leftShooterMotorID, MotorType.kBrushless);
     private final CANSparkMax rightShooter = new CANSparkMax(UpperConstants.rightShooterMotorID, MotorType.kBrushless);
@@ -128,26 +128,6 @@ public class UpperSub extends SubsystemBase{
         if(timer.get() < 0.1) setLED(r, g, b);
         else if(timer.get() < 0.2) setLED(0, 0, 0);
         else timer.restart();
-    }
-
-    public void gayPride() {
-        int counter = 0;
-        boolean oneTime = false;
-        timer.start();
-        if(timer.get() < 0.1) {
-            oneTime = false;
-            for(int i=0;i<buffer.getLength();i++) {
-                if(i%6 == (5+counter)%6)  buffer.setRGB(i, 255, 0, 255);
-                else if (i%6 == (0+counter)%6)  buffer.setRGB(i, 255, 0, 0);
-                else if (i%6 == (1+counter)%6)  buffer.setRGB(i, 255, 255, 0);
-                else if (i%6 == (2+counter)%6)  buffer.setRGB(i, 0, 255, 0);
-                else if (i%6 == (3+counter)%6)  buffer.setRGB(i, 0, 255, 255);
-                else if (i%6 == (4+counter)%6)  buffer.setRGB(i, 0, 0, 255);
-            }
-        } else if (timer.get() >= 0.1 && !oneTime) {
-            counter++;
-            oneTime = true;
-        } else timer.restart();
     }
 
     // limitSwitch

@@ -33,7 +33,8 @@ public class CustomizedDelay extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Delay " + goalTime + "s finished");
+    if(interrupted) System.out.println("Bro ur delay was fucked");
+    else System.out.println("Delay " + goalTime + "s finished");
   }
 
   // Returns true when the command should end.

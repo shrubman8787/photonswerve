@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
     // m_Y.addOption("Z5", "Z5");
 
     SmartDashboard.putData("Alliance Team", m_Alliance);
+    SmartDashboard.putData("Auto Path", m_AutoCommand);
     // SmartDashboard.putData("X", m_X);
     // SmartDashboard.putData("Y", m_Y);
     // SmartDashboard.putData("Z", m_Z);
@@ -150,11 +151,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
-    if(driverController.getRightBumperPressed()) {
-      autoAim.schedule();
-    }
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void teleopExit() {}

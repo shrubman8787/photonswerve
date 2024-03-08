@@ -49,4 +49,14 @@ public class TeleopSwerve extends Command {
         rotationVal * Constants.SwerveConstants.maxAngularVelocity, true,
         true);
   }
+
+  @Override
+  public void end(boolean interrupted){
+    System.out.println("bro ur teleop swerve is fucked");
+  }
+
+  @Override
+  public boolean isFinished(){
+    return false;
+  }
 }
