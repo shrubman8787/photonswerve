@@ -57,17 +57,24 @@ public class AutoUpper extends Command{
                     else s_Upper.blink(12,41,235);
                     if(s_Upper.hasNote()) state = UpperState.DEFAULT;
                     break;
-                case BASE:
-                    elbowAngle = UpperConstants.ELBOW_BASE_POS;
+                case CENTERBASE:
+                    elbowAngle = UpperConstants.ELBOW_CENTERBASE_POS;
                     intakeSpeed = 0;
                     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                    if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(255,0,0);
-                    else s_Upper.setLED(0,255,0);
+                    if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(0,255,0);
+                    else s_Upper.charge(255,0,0);
+                    break;
+                case SIDEBASE:
+                    elbowAngle = UpperConstants.ELBOW_SIDEBASE_POS;
+                    intakeSpeed = 0;
+                    shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+                    if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(0,255,0);
+                    else s_Upper.charge(255,0,0);
                     break;
                 case SHOOT:
                     intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
                     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                    s_Upper.blink(255,0,0);
+                    s_Upper.blink(0,255,0);
                     break;
                 default:
                     break;
@@ -89,7 +96,7 @@ public class AutoUpper extends Command{
     @Override
     public boolean isFinished() {
         if(state != null) {
-            if(Math.abs(elbowAngle - s_Upper.getElbowRotation()) < 0.005) return true;
+            if(Math.abs(elbowAngle - s_Upper.getElbowRotation()) < 0.005 && Math.abs(s_Upper.getShooterRPM()) >= UpperConstants.SHOOTER_LEGAL_SPEED) return true;
         } else {
             if(Timer.getFPGATimestamp() - lastTime > time) return true;
         }

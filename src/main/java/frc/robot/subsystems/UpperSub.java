@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.ChenryLib.MathUtility;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.robotConstants;
 
@@ -37,6 +37,8 @@ public class UpperSub extends SubsystemBase{
     private final DigitalInput rightLimitSwitch = new DigitalInput(UpperConstants.rightLimitSwitchID);
 
     Timer timer = new Timer();
+
+    int counter = 0;
 
     public UpperSub() {
         leftElbow.setInverted(false);
@@ -114,7 +116,7 @@ public class UpperSub extends SubsystemBase{
 
     public void setShooter(double speed) {
         leftShooter.set(speed);
-        rightShooter.set(speed * (Constants.UpperConstants.leftShooterRPM / Constants.UpperConstants.rightShooterRPM)); // brute force attack
+        rightShooter.set(speed); // brute force attack
     }
 
     // LED
@@ -130,6 +132,56 @@ public class UpperSub extends SubsystemBase{
         else timer.restart();
     }
 
+    public void marquee(int r, int g, int b) {
+        timer.start();
+        if(timer.get() < 0.1) {
+            for(int i=0;i<buffer.getLength()-1;i++) {
+                if(((int)((i+counter)/6)) % 2 == 0) buffer.setRGB(i, r, g, b);
+                else buffer.setRGB(i, 0, 0, 0);
+            }
+        } else if(timer.get() < 0.2){}
+        else {
+            counter++;
+            timer.restart();
+        }
+        led.setData(buffer);
+    }
+
+    public void charge(int r, int g, int b) { // from 24->31&23->16, then 15->0 
+        int chargeBar = MathUtility.clamp((int)(-getShooterRPM() / UpperConstants.SHOOTER_LEGAL_SPEED * 20), 0, 20);
+        int counter1 = 24;
+        int counter2 = 23;
+        if(chargeBar <= 4) {
+            for(int i=0;i<buffer.getLength();i++){
+                buffer.setRGB(i, 0, 0, 0);
+            }
+            for(int i=0;i<chargeBar;i++){
+                buffer.setRGB(counter1, r, g, b);
+                buffer.setRGB((counter1+1), r, g, b);
+                buffer.setRGB(counter2, r, g, b);
+                buffer.setRGB((counter2-1), r, g, b);
+                counter1+=2;
+                counter2-=2;
+            }
+        } else {
+            for(int i=0;i<buffer.getLength();i++){
+                buffer.setRGB(i, 0, 0, 0);
+            }
+            for(int i=0;i<4;i++) {
+                buffer.setRGB(counter1, r, g, b);
+                buffer.setRGB((counter1+1), r, g, b);
+                buffer.setRGB(counter2, r, g, b);
+                buffer.setRGB((counter2-1), r, g, b);
+                counter1+=2;
+                counter2-=2;
+            }
+            for(int i=15;i>20-chargeBar;i--) {
+                buffer.setRGB(i, r, g, b);
+            }
+        }
+        led.setData(buffer);
+    }
+
     // limitSwitch
     public boolean hasNote() {
         return (leftLimitSwitch.get() || rightLimitSwitch.get());
@@ -139,6 +191,8 @@ public class UpperSub extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putNumber("elbowDEG", getElbowRotation());
         SmartDashboard.putNumber("ShooterRPM", getShooterRPM());
+        SmartDashboard.putNumber("rightShooterRPM", getRightShooterRPM());
+        SmartDashboard.putNumber("leftShooterRPM", getLeftShooterRPM());
         SmartDashboard.putBoolean("hasNote", hasNote());
     }
 }   

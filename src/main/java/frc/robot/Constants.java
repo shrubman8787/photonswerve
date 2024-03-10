@@ -38,13 +38,15 @@ public final class Constants {
     DEFAULT,
     GROUND,
     AMP,
-    BASE,
+    CENTERBASE,
+    SIDEBASE,
     AUTO,
     TRANSPORT,
     SHOOT,
-    PODIUM,
+    TRAP,
     TELE,
     NULL,
+    PREENDGAME,
     ENDGAME
   }
 
@@ -217,10 +219,13 @@ public final class Constants {
 
     public static final double ELBOW_DEFAULT_POS = -0.002197;
     public static final double ELBOW_GROUND_POS = -0.236328;
-    public static final double ELBOW_AMP_POS = 0.012939;
-    public static final double ELBOW_BASE_POS = -0.204589;
+    public static final double ELBOW_AMP_POS = -0.007951; // 0.012939
+    public static final double ELBOW_CENTERBASE_POS = -0.204589;
+    public static final double ELBOW_SIDEBASE_POS = -0.20;
     public static final double ELBOW_PODIUM_POS = -0.170159; // need to test
-    public static final double ELBOW_TRANSPORT_POS = -0.142387; // need to test
+    public static final double ELBOW_TRANSPORT_POS = -0.070312; // need to test
+    public static final double ELBOW_TRAP_POS = -0.192351; // need to test
+    public static final double ELBOW_PREENDGAME_POS = 0.05;
 
     public static final double INTAKE_GROUND_SPEED = 0.3;
     public static final double INTAKE_SHOOT_SPEED = 1;

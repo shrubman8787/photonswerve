@@ -47,11 +47,11 @@ public class VisionSub extends SubsystemBase{
 
     public boolean hasTarget() { // amp wait till pid is correct
         if(Robot.alliance == "RED") {
-            if(Constants.state == UpperState.PODIUM && getTid() == 4) return true;
+            if(Constants.state == UpperState.AUTO && getTid() == 4) return true;
             // else if(Constants.state == UpperState.AMP && getTid() == 5) return true;
             else return false;
         } else if(Robot.alliance == "BLUE") {
-            if(Constants.state == UpperState.PODIUM && getTid() == 7) return true;
+            if(Constants.state == UpperState.AUTO && getTid() == 7) return true;
             // else if(Constants.state == UpperState.AMP && getTid() == 6) return true;
             else return false;
         } else return false;

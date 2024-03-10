@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.ChenryLib.PID;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.UpperState;
 import frc.robot.subsystems.UpperSub;
@@ -20,6 +19,9 @@ public class TeleopUpper extends Command{
     private double elbowAngle;
     private double intakeSpeed;
     private double shooterSpeed;
+    private int counter = 0;
+    private boolean oneTime = false;
+    private boolean endGaming = false;
 
     private final PID elbowPID = new PID(
         UpperConstants.elbowKP, 
@@ -45,14 +47,26 @@ public class TeleopUpper extends Command{
     public void execute() {
 
         // auto-aiming temporarily not using
-        if(controller.getYButtonPressed()) Constants.state = Constants.state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND;
-        if(controller.getXButtonPressed()) Constants.state = Constants.state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP;
-        if(controller.getAButtonPressed()) Constants.state = Constants.state == UpperState.BASE ? UpperState.DEFAULT : UpperState.BASE;
-        if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.PODIUM ? UpperState.DEFAULT : UpperState.PODIUM;
-        if(controller.getLeftBumperPressed()) Constants.state = Constants.state == UpperState.TRANSPORT ? UpperState.DEFAULT : UpperState.TRANSPORT;
-        if(controller.getRightTriggerAxis() > 0.01) Constants.state = UpperState.SHOOT;
+        if(controller.getYButtonPressed()) Constants.state = Constants.state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND; endGaming = false;
+        if(controller.getXButtonPressed()) Constants.state = Constants.state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP; endGaming = false;
+        if(controller.getAButtonPressed()) Constants.state = Constants.state == UpperState.CENTERBASE ? UpperState.DEFAULT : UpperState.CENTERBASE; endGaming = false;
+        if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.SIDEBASE ? UpperState.DEFAULT : UpperState.SIDEBASE; endGaming = false;
+        if(controller.getLeftBumperPressed()) Constants.state = Constants.state == UpperState.TRANSPORT ? UpperState.DEFAULT : UpperState.TRANSPORT; endGaming = false;
+        if(controller.getRightBumperPressed()) Constants.state = Constants.state == UpperState.TRAP ? UpperState.DEFAULT : UpperState.TRAP; endGaming = false;
+        if(controller.getRightTriggerAxis() > 0.01) Constants.state = UpperState.SHOOT; endGaming = false;
         if(controller.getRightTriggerAxis() < 0.01 && Constants.state == UpperState.SHOOT) Constants.state = UpperState.NULL;
-        if(controller.getStartButtonPressed()) Constants.state = Constants.state == UpperState.ENDGAME ? UpperState.DEFAULT : UpperState.ENDGAME;
+        if(controller.getStartButtonPressed() && oneTime == false) {
+            counter = counter==2 ? 0 : counter+1;
+            oneTime = true;
+            endGaming = true;
+        }
+        if(controller.getStartButtonReleased()) oneTime = false;
+
+        if(endGaming) {
+            if(counter == 0) Constants.state = UpperState.DEFAULT;
+            if(counter == 1) Constants.state = UpperState.PREENDGAME;
+            if(counter == 2) Constants.state = UpperState.ENDGAME;
+        }
 
         // if(controller.getLeftBumperPressed()) Constants.state = Constants.state == UpperState.TELE ? UpperState.DEFAULT : UpperState.TELE;
 
@@ -61,10 +75,9 @@ public class TeleopUpper extends Command{
                 elbowAngle = UpperConstants.ELBOW_DEFAULT_POS;
                 intakeSpeed = 0;
                 shooterSpeed = 0;
-                if(Robot.alliance == "RED") s_Upper.setLED(255, 0, 0); // 232 213 245
-                else if(Robot.alliance == "BLUE") s_Upper.setLED(0, 0, 255);
-                else s_Upper.setLED(232, 213, 245);
-                break;
+                if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(232, 213, 245);
+                else s_Upper.setLED(255, 0, 0);
+                break;  
             case GROUND:
                 elbowAngle = UpperConstants.ELBOW_GROUND_POS;
                 intakeSpeed = s_Upper.hasNote() ? 0: UpperConstants.INTAKE_GROUND_SPEED;
@@ -79,8 +92,8 @@ public class TeleopUpper extends Command{
                 shooterSpeed = 0;
                 s_Upper.setLED(255, 255, 0);
                 break;
-            case BASE:
-                elbowAngle = UpperConstants.ELBOW_BASE_POS;
+            case CENTERBASE:
+                elbowAngle = UpperConstants.ELBOW_CENTERBASE_POS;
                 intakeSpeed = 0;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                 if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
@@ -89,9 +102,11 @@ public class TeleopUpper extends Command{
             case TRANSPORT:
                 elbowAngle = UpperConstants.ELBOW_TRANSPORT_POS;
                 intakeSpeed = 0;
-                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
-                else s_Upper.setLED(255, 0, 0);
+                shooterSpeed = 0;
+                s_Upper.setLED(183, 69, 255);
+                // shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+                // if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
+                // else s_Upper.setLED(255, 0, 0);
                 break;
             case AUTO:
                 elbowAngle = s_Vision.calculateAutoAiming();
@@ -100,12 +115,19 @@ public class TeleopUpper extends Command{
                 if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
                 else s_Upper.setLED(255, 0, 0);
                 break;
-            case PODIUM:
-                elbowAngle = UpperConstants.ELBOW_PODIUM_POS;
+            case SIDEBASE:
+                elbowAngle = UpperConstants.ELBOW_SIDEBASE_POS;
                 intakeSpeed = 0;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                 if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
                 else s_Upper.setLED(255, 0, 0);
+            case TRAP:
+                elbowAngle = UpperConstants.ELBOW_TRAP_POS;
+                intakeSpeed = 0;
+                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
+                else s_Upper.setLED(255, 0, 0);
+                break;
             case SHOOT:
                 intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
@@ -119,7 +141,14 @@ public class TeleopUpper extends Command{
             case NULL:
                 shooterSpeed = 0;
                 intakeSpeed = 0;
-                s_Upper.setLED(100, 100, 200);
+                if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(100, 200, 200);
+                else s_Upper.setLED(255, 0, 0);
+                break;
+            case PREENDGAME:
+                elbowAngle = UpperConstants.ELBOW_PREENDGAME_POS;
+                shooterSpeed = 0;
+                intakeSpeed = 0;
+                s_Upper.setLED(87, 169, 254);
                 break;
             case ENDGAME:
                 elbowAngle = UpperConstants.ELBOW_GROUND_POS;

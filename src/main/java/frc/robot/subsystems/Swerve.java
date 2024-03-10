@@ -69,7 +69,7 @@ public class Swerve extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.SwerveConstants.maxSpeed);
 
-    for (SwerveModule mod : mSwerveMods) {
+    for (SwerveModule mod : mSwerveMods) { 
       mod.setDesiredState(desiredStates[mod.moduleNumber], false);
     }
   }
@@ -128,7 +128,7 @@ public class Swerve extends SubsystemBase {
     StatusSignal<Double> gyro4Yaw = gyro4.getYaw();
     double averageAngle = (gyro1Yaw.getValue() + gyro2Yaw.getValue() + gyro3Yaw.getValue() + gyro4Yaw.getValue()) / 4;
     return (Constants.SwerveConstants.invertGyro) ? Rotation2d.fromDegrees(360 - averageAngle) : Rotation2d.fromDegrees(averageAngle);
-  }
+  } 
 
   @Override
   public void periodic() {
