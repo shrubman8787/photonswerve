@@ -50,7 +50,7 @@ public class TeleopUpper extends Command{
         if(controller.getYButtonPressed()) Constants.state = Constants.state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND; endGaming = false;
         if(controller.getXButtonPressed()) Constants.state = Constants.state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP; endGaming = false;
         if(controller.getAButtonPressed()) Constants.state = Constants.state == UpperState.CENTERBASE ? UpperState.DEFAULT : UpperState.CENTERBASE; endGaming = false;
-        if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.SIDEBASE ? UpperState.DEFAULT : UpperState.SIDEBASE; endGaming = false;
+        // if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.SIDEBASE ? UpperState.DEFAULT : UpperState.SIDEBASE; endGaming = false; need to be deleted
         if(controller.getLeftBumperPressed()) Constants.state = Constants.state == UpperState.TRANSPORT ? UpperState.DEFAULT : UpperState.TRANSPORT; endGaming = false;
         if(controller.getRightBumperPressed()) Constants.state = Constants.state == UpperState.TRAP ? UpperState.DEFAULT : UpperState.TRAP; endGaming = false;
         if(controller.getRightTriggerAxis() > 0.01) Constants.state = UpperState.SHOOT; endGaming = false;
@@ -76,7 +76,7 @@ public class TeleopUpper extends Command{
                 intakeSpeed = 0;
                 shooterSpeed = 0;
                 if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(232, 213, 245);
-                else s_Upper.setLED(255, 0, 0);
+                else s_Upper.charge(255, 0, 0);
                 break;  
             case GROUND:
                 elbowAngle = UpperConstants.ELBOW_GROUND_POS;
@@ -97,7 +97,7 @@ public class TeleopUpper extends Command{
                 intakeSpeed = 0;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                 if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
-                else s_Upper.setLED(255,0,0);
+                else s_Upper.charge(255,0,0);
                 break;
             case TRANSPORT:
                 elbowAngle = UpperConstants.ELBOW_TRANSPORT_POS;
@@ -113,20 +113,20 @@ public class TeleopUpper extends Command{
                 intakeSpeed = 0;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                 if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
-                else s_Upper.setLED(255, 0, 0);
+                else s_Upper.charge(255, 0, 0);
                 break;
             case SIDEBASE:
                 elbowAngle = UpperConstants.ELBOW_SIDEBASE_POS;
                 intakeSpeed = 0;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                 if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
-                else s_Upper.setLED(255, 0, 0);
+                else s_Upper.charge(255, 0, 0);
             case TRAP:
                 elbowAngle = UpperConstants.ELBOW_TRAP_POS;
                 intakeSpeed = 0;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                 if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
-                else s_Upper.setLED(255, 0, 0);
+                else s_Upper.charge(255, 0, 0);
                 break;
             case SHOOT:
                 intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
@@ -142,7 +142,7 @@ public class TeleopUpper extends Command{
                 shooterSpeed = 0;
                 intakeSpeed = 0;
                 if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(100, 200, 200);
-                else s_Upper.setLED(255, 0, 0);
+                else s_Upper.charge(255, 0, 0);
                 break;
             case PREENDGAME:
                 elbowAngle = UpperConstants.ELBOW_PREENDGAME_POS;

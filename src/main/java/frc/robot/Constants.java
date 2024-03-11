@@ -219,8 +219,8 @@ public final class Constants {
 
     public static final double ELBOW_DEFAULT_POS = -0.002197;
     public static final double ELBOW_GROUND_POS = -0.236328;
-    public static final double ELBOW_AMP_POS = -0.007951; // 0.012939
-    public static final double ELBOW_CENTERBASE_POS = -0.204589;
+    public static final double ELBOW_AMP_POS = -0.002197; // 0.012939
+    public static final double ELBOW_CENTERBASE_POS = -0.2;
     public static final double ELBOW_SIDEBASE_POS = -0.20;
     public static final double ELBOW_PODIUM_POS = -0.170159; // need to test
     public static final double ELBOW_TRANSPORT_POS = -0.070312; // need to test
