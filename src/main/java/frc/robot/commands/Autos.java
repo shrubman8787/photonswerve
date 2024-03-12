@@ -55,6 +55,19 @@ public class Autos {
             ),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime)
         );
+        //     new ParallelRaceGroup(
+        //         new AutoSwerve(s_Swerve, -6.68, 1.57, 0),
+        //         new AutoUpper(s_Upper, -0.236328, 0.03, 0.3, 5)
+        //     ),
+        //     new ParallelRaceGroup(
+        //         new AutoSwerve(s_Swerve, -4, 1.57, 0),
+        //         new AutoUpper(s_Upper, -0.204589, -1, 0, 5)
+        //     ),
+        //     new ParallelRaceGroup(
+        //         new AutoSwerve(s_Swerve, 0, 0, 0),
+        //         new AutoUpper(s_Upper, -0.204589, -1, 0, 5)
+        //     ),
+        //     new AutoUpper(s_Upper, -0.204589, -1, 1, 0.5)
     }
 
     public SequentialCommandGroup MidX2Base_b2n(Swerve s_Swerve, UpperSub s_Upper, VisionSub s_Vision) {
