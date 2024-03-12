@@ -8,11 +8,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.ChenryLib.PID;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.Constants.UpperState;
+import frc.robot.Constants.robotConstants;
 
 public class VisionSub extends SubsystemBase{
     
@@ -45,14 +44,12 @@ public class VisionSub extends SubsystemBase{
         return table.getDoubleTopic("tid").subscribe(0.0).get();
     }
 
-    public boolean hasTarget() { // amp wait till pid is correct
+    public boolean hasTarget() { // need addition
         if(Robot.alliance == "RED") {
-            if(Constants.state == UpperState.AUTO && getTid() == 4) return true;
-            // else if(Constants.state == UpperState.AMP && getTid() == 5) return true;
+            if(robotConstants.mode == "AUTO" && getTid() == 4) return true;
             else return false;
         } else if(Robot.alliance == "BLUE") {
-            if(Constants.state == UpperState.AUTO && getTid() == 7) return true;
-            // else if(Constants.state == UpperState.AMP && getTid() == 6) return true;
+            if(robotConstants.mode == "AUTO" && getTid() == 7) return true;
             else return false;
         } else return false;
     }
@@ -77,59 +74,60 @@ public class VisionSub extends SubsystemBase{
         return facingPID.calculate(getTx());
     }
 
-    public double calculateAutoAiming() {
-        double L1 = 0;
-        double L2 = 0;
-        double W1 = 0;
-        double W2 = 0;
-        if(Robot.alliance == "RED") {
-            if(FieldConstants.autoAimDataRed.get(new Translation2d(getRobotX(), getRobotY())) != null) return FieldConstants.autoAimDataRed.get(new Translation2d(getRobotX(), getRobotY()));
-            else {
-                outer:for(int i=0;i<FieldConstants.areaLengthCutPieces;i++){
-                    for(int j=0;j<FieldConstants.areaWidthCutPieces;j++){
-                        if((getRobotX()>=(FieldConstants.areaInitialXRed + i*FieldConstants.areaWidthPartial) && getRobotX()<=(FieldConstants.areaInitialXRed + (i+1)*FieldConstants.areaWidthPartial)) &&
-                            getRobotY()>=(FieldConstants.areaInitialYRed + j*FieldConstants.areaLengthPartial) && getRobotY()<=(FieldConstants.areaInitialYRed + (j+1)*FieldConstants.areaLengthPartial)){
-                                L1 = FieldConstants.areaInitialYRed + j*FieldConstants.areaLengthPartial;
-                                L2 = FieldConstants.areaInitialYRed + (j+1)*FieldConstants.areaLengthPartial;
-                                W1 = FieldConstants.areaInitialXRed + i*FieldConstants.areaWidthPartial;
-                                W2 = FieldConstants.areaInitialXRed + (i+1)*FieldConstants.areaWidthPartial;
-                                break outer;
-                        }
-                    }
-                }
-                return (FieldConstants.autoAimDataRed.get(new Translation2d(L1, W1)) + 
-                        FieldConstants.autoAimDataRed.get(new Translation2d(L1, W2)) + 
-                        FieldConstants.autoAimDataRed.get(new Translation2d(L2, W1)) +
-                        FieldConstants.autoAimDataRed.get(new Translation2d(L2, W2)) / 4);
-            }
-        } else if(Robot.alliance == "BLUE") {
-            if(FieldConstants.autoAimDataBlue.get(new Translation2d(getRobotX(), getRobotY())) != null) return FieldConstants.autoAimDataRed.get(new Translation2d(getRobotX(), getRobotY()));
-            else {
-                outer:for(int i=0;i<FieldConstants.areaLengthCutPieces;i++){
-                    for(int j=0;j<FieldConstants.areaWidthCutPieces;j++){
-                        if((getRobotX()>=(FieldConstants.areaInitialXBlue + i*FieldConstants.areaWidthPartial) && getRobotX()<=(FieldConstants.areaInitialXRed + (i+1)*FieldConstants.areaWidthPartial)) &&
-                            getRobotY()>=(FieldConstants.areaInitialYBlue + j*FieldConstants.areaLengthPartial) && getRobotY()<=(FieldConstants.areaInitialYRed + (j+1)*FieldConstants.areaLengthPartial)){
-                                L1 = FieldConstants.areaInitialYBlue + j*FieldConstants.areaLengthPartial;
-                                L2 = FieldConstants.areaInitialYBlue + (j+1)*FieldConstants.areaLengthPartial;
-                                W1 = FieldConstants.areaInitialXBlue + i*FieldConstants.areaWidthPartial;
-                                W2 = FieldConstants.areaInitialXBlue + (i+1)*FieldConstants.areaWidthPartial;
-                                break outer;
-                        }
-                    }
-                }
-                return (FieldConstants.autoAimDataBlue.get(new Translation2d(L1, W1)) + 
-                        FieldConstants.autoAimDataBlue.get(new Translation2d(L1, W2)) + 
-                        FieldConstants.autoAimDataBlue.get(new Translation2d(L2, W1)) +
-                        FieldConstants.autoAimDataBlue.get(new Translation2d(L2, W2)) / 4);
-            }
-        } else return 404;
-    }
+    // public double calculateAutoAiming() {
+    //     double L1 = 0;
+    //     double L2 = 0;
+    //     double W1 = 0;
+    //     double W2 = 0;
+    //     if(Robot.alliance == "RED") {
+    //         if(FieldConstants.autoAimDataRed.get(new Translation2d(getRobotX(), getRobotY())) != null) return FieldConstants.autoAimDataRed.get(new Translation2d(getRobotX(), getRobotY()));
+    //         else {
+    //             outer:for(int i=0;i<FieldConstants.areaLengthCutPieces;i++){
+    //                 for(int j=0;j<FieldConstants.areaWidthCutPieces;j++){
+    //                     if((getRobotX()>=(FieldConstants.areaInitialXRed + i*FieldConstants.areaWidthPartial) && getRobotX()<=(FieldConstants.areaInitialXRed + (i+1)*FieldConstants.areaWidthPartial)) &&
+    //                         getRobotY()>=(FieldConstants.areaInitialYRed + j*FieldConstants.areaLengthPartial) && getRobotY()<=(FieldConstants.areaInitialYRed + (j+1)*FieldConstants.areaLengthPartial)){
+    //                             L1 = FieldConstants.areaInitialYRed + j*FieldConstants.areaLengthPartial;
+    //                             L2 = FieldConstants.areaInitialYRed + (j+1)*FieldConstants.areaLengthPartial;
+    //                             W1 = FieldConstants.areaInitialXRed + i*FieldConstants.areaWidthPartial;
+    //                             W2 = FieldConstants.areaInitialXRed + (i+1)*FieldConstants.areaWidthPartial;
+    //                             break outer;
+    //                     }
+    //                 }
+    //             }
+    //             return (FieldConstants.autoAimDataRed.get(new Translation2d(L1, W1)) + 
+    //                     FieldConstants.autoAimDataRed.get(new Translation2d(L1, W2)) + 
+    //                     FieldConstants.autoAimDataRed.get(new Translation2d(L2, W1)) +
+    //                     FieldConstants.autoAimDataRed.get(new Translation2d(L2, W2)) / 4);
+    //         }
+    //     } else if(Robot.alliance == "BLUE") {
+    //         if(FieldConstants.autoAimDataBlue.get(new Translation2d(getRobotX(), getRobotY())) != null) return FieldConstants.autoAimDataRed.get(new Translation2d(getRobotX(), getRobotY()));
+    //         else {
+    //             outer:for(int i=0;i<FieldConstants.areaLengthCutPieces;i++){
+    //                 for(int j=0;j<FieldConstants.areaWidthCutPieces;j++){
+    //                     if((getRobotX()>=(FieldConstants.areaInitialXBlue + i*FieldConstants.areaWidthPartial) && getRobotX()<=(FieldConstants.areaInitialXRed + (i+1)*FieldConstants.areaWidthPartial)) &&
+    //                         getRobotY()>=(FieldConstants.areaInitialYBlue + j*FieldConstants.areaLengthPartial) && getRobotY()<=(FieldConstants.areaInitialYRed + (j+1)*FieldConstants.areaLengthPartial)){
+    //                             L1 = FieldConstants.areaInitialYBlue + j*FieldConstants.areaLengthPartial;
+    //                             L2 = FieldConstants.areaInitialYBlue + (j+1)*FieldConstants.areaLengthPartial;
+    //                             W1 = FieldConstants.areaInitialXBlue + i*FieldConstants.areaWidthPartial;
+    //                             W2 = FieldConstants.areaInitialXBlue + (i+1)*FieldConstants.areaWidthPartial;
+    //                             break outer;
+    //                     }
+    //                 }
+    //             }
+    //             return (FieldConstants.autoAimDataBlue.get(new Translation2d(L1, W1)) + 
+    //                     FieldConstants.autoAimDataBlue.get(new Translation2d(L1, W2)) + 
+    //                     FieldConstants.autoAimDataBlue.get(new Translation2d(L2, W1)) +
+    //                     FieldConstants.autoAimDataBlue.get(new Translation2d(L2, W2)) / 4);
+    //         }
+    //     } else return 404;
+    // }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("RobotPose_X", getRobotX());
         SmartDashboard.putNumber("RobotPose_Y", getRobotY());
         SmartDashboard.putNumber("RobotPose_r", getRobotDEG());
+        SmartDashboard.putNumber("tx", getTx());
         SmartDashboard.putBoolean("HasTarget", hasTarget());
-         }
+    }
 }

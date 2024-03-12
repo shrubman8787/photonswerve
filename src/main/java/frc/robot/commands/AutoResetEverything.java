@@ -16,16 +16,18 @@ import frc.robot.subsystems.Swerve;
 public class AutoResetEverything extends InstantCommand {
 
   private final Swerve s_Swerve;
+  private final double pos;
 
-  public AutoResetEverything(Swerve s_Swerve) {
+  public AutoResetEverything(Swerve s_Swerve, double pos) {
     this.s_Swerve = s_Swerve;
+    this.pos = pos;
     addRequirements(s_Swerve);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    s_Swerve.zeroGyro();
+    s_Swerve.setGyro(pos);
     s_Swerve.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0))) ;
   }
 }

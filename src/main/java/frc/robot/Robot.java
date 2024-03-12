@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,19 +32,11 @@ public class Robot extends TimedRobot {
   private final TeleopSwerve teleopSwerve = new TeleopSwerve(m_Swerve, m_vision, driverController);
   private final TeleopUpper teleopUpper = new TeleopUpper(m_upper, m_vision, driverController);
 
-  // private final AutoAim autoAim = new AutoAim(m_Swerve, m_upper, m_vision);
-
   public static String alliance;
   private String command;
-  // private String X;
-  // private String Y;
-  // private String Z;
 
   SendableChooser<String> m_Alliance = new SendableChooser<>();
   SendableChooser<String> m_AutoCommand = new SendableChooser<>();
-  // SendableChooser<String> m_X = new SendableChooser<>();
-  // SendableChooser<String> m_Y = new SendableChooser<>();
-  // SendableChooser<String> m_Z = new SendableChooser<>();
 
   @Override
   public void robotInit() {
@@ -54,32 +45,20 @@ public class Robot extends TimedRobot {
     m_Alliance.setDefaultOption("RED", "RED");
     m_Alliance.addOption("BLUE", "BLUE");
 
-    m_AutoCommand.setDefaultOption("X1Y1", "X1Y1");
-    m_AutoCommand.addOption("X2Y2Z3", "X2Y2Z3");
-    m_AutoCommand.addOption("X3Y3", "X3Y3");
-    m_AutoCommand.addOption("X3Leave", "X3Leave");
-    m_AutoCommand.addOption("ShootCenter", "ShootCenter");
-    m_AutoCommand.addOption("ShootSide", "ShootSide");
+    // left=L mid=M right=R base=B red=r blue=b
+    // 1 note
+    m_AutoCommand.setDefaultOption("left1n", "left1n");
+    m_AutoCommand.addOption("mid1n", "mid1n");
+    m_AutoCommand.addOption("right1n", "right1n");
 
-    // m_X.setDefaultOption("X1", "X1");
-    // m_X.addOption("X2", "X2");
-    // m_X.addOption("X3", "X3");
+    // 2 note
+    m_AutoCommand.addOption("midB2nb", "midB2nb");
 
-    // m_Y.setDefaultOption("Y1", "Y1");
-    // m_Y.addOption("Y2", "Y2");
-    // m_Y.addOption("Y3", "Y3");
-
-    // m_Y.setDefaultOption("Z1", "Z1");
-    // m_Y.addOption("Z2", "Z2");
-    // m_Y.addOption("Z3", "Z3");
-    // m_Y.addOption("Z4", "Z4");
-    // m_Y.addOption("Z5", "Z5");
+    // 3 note
+    m_AutoCommand.addOption("leftB3nb", "leftB3nb");
 
     SmartDashboard.putData("Alliance Team", m_Alliance);
     SmartDashboard.putData("Auto Path", m_AutoCommand);
-    // SmartDashboard.putData("X", m_X);
-    // SmartDashboard.putData("Y", m_Y);
-    // SmartDashboard.putData("Z", m_Z);
   }
 
   @Override
@@ -94,56 +73,63 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    robotConstants.mode = "DISABLED";
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    m_upper.charge(255, 0, 0, (driverController.getLeftY() + driverController.getRightY()));
+  }
 
   @Override
   public void disabledExit() {}
 
   @Override
   public void autonomousInit() {
+    robotConstants.mode = "AUTO";
     if(alliance == "RED") {
       switch(command){
-        case "X1Y1":
-          m_autonomousCommand = new Autos().X1Y1_r(m_Swerve, m_upper, m_vision);
+        // 1 note
+        case "left1n":
+          m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
           break;
-        case "X2Y2Z3":
-          m_autonomousCommand = new Autos().X2Y2Z3_r(m_Swerve, m_upper, m_vision);
+        case "mid1n":
+          m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
           break;
-        case "X3Y3":
-          m_autonomousCommand = new Autos().X3Y3_r(m_Swerve, m_upper, m_vision);
+        case "right1n":
+          m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
           break;
-        case "X3Leave":
-          m_autonomousCommand = new Autos().X3Leave_r(m_Swerve, m_upper);
-          break;
-        case "ShootCenter":
-          m_autonomousCommand = new Autos().ShootCenter(m_Swerve, m_upper);
-          break;
-        case "ShootSide":
-          m_autonomousCommand = new Autos().ShootSide(m_Swerve, m_upper);
+
+        default:
+          m_autonomousCommand = null;
           break;
       }
     } else if(alliance == "BLUE") {
       switch(command){
-        case "X1Y1":
-          m_autonomousCommand = new Autos().X1Y1_b(m_Swerve, m_upper, m_vision);
+        // 1 note
+        case "left1n":
+          m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
           break;
-        case "X2Y2Z3":
-          m_autonomousCommand = new Autos().X2Y2Z3_b(m_Swerve, m_upper, m_vision);
+        case "mid1n":
+          m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
           break;
-        case "X3Y3":
-          m_autonomousCommand = new Autos().X3Y3_b(m_Swerve, m_upper, m_vision);
+        case "right1n":
+          m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
           break;
-        case "X3Leave":
-          m_autonomousCommand = new Autos().X3Leave_r(m_Swerve, m_upper);
+
+        // 2 note
+        case "midB2nb":
+          m_autonomousCommand = new Autos().MidX2Base_b2n(m_Swerve, m_upper, m_vision);
           break;
-        case "ShootCenter":
-          m_autonomousCommand = new Autos().ShootCenter(m_Swerve, m_upper);
+
+        // 3 note
+        case "leftB3nb":
+          m_autonomousCommand = new Autos().LeftX1Y1Base_b3n(m_Swerve, m_upper, m_vision);
           break;
-        case "ShootSide":
-          m_autonomousCommand = new Autos().ShootSide(m_Swerve, m_upper);
+        
+        default:
+          m_autonomousCommand = null;
           break;
       }
     }
@@ -161,11 +147,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotConstants.mode = "TELE";
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
     m_Swerve.setDefaultCommand(teleopSwerve);
     m_upper.setDefaultCommand(teleopUpper);
+    m_vision.setDefaultCommand(null);
   }
 
   @Override

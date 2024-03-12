@@ -43,7 +43,7 @@ public class AutoAim extends Command{
     public ParallelCommandGroup getCommand() {
         Pair<Double,Double> data = calculate();
         return new ParallelCommandGroup(
-            new AutoSwerve(s_Swerve, 0, 0, data.getFirst()),
+            new AutoSwerve(s_Swerve, s_Vision, 0, 0, data.getFirst(), false),
             new AutoUpper(s_Upper, data.getSecond(), 0, 0, 1)
         );
     }

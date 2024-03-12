@@ -147,8 +147,43 @@ public class UpperSub extends SubsystemBase{
         led.setData(buffer);
     }
 
-    public void charge(int r, int g, int b) { // from 24->31&23->16, then 15->0 
-        int chargeBar = MathUtility.clamp((int)(-getShooterRPM() / UpperConstants.SHOOTER_LEGAL_SPEED * 20), 0, 20);
+    public void charge(int r, int g, int b, boolean isTrap) { // from 24->31&23->16, then 15->0 
+        int chargeBar = isTrap ? MathUtility.clamp((int)(-getShooterRPM() / UpperConstants.SHOOTER_LEGAL_SPEED * UpperConstants.SHOOTER_TRAP_SPEED * 20), 0, 20) : MathUtility.clamp((int)(-getShooterRPM() / UpperConstants.SHOOTER_LEGAL_SPEED * 20), 0, 20);
+        int counter1 = 24;
+        int counter2 = 23;
+        if(chargeBar <= 4) {
+            for(int i=0;i<buffer.getLength();i++){
+                buffer.setRGB(i, 0, 0, 0);
+            }
+            for(int i=0;i<chargeBar;i++){
+                buffer.setRGB(counter1, r, g, b);
+                buffer.setRGB((counter1+1), r, g, b);
+                buffer.setRGB(counter2, r, g, b);
+                buffer.setRGB((counter2-1), r, g, b);
+                counter1+=2;
+                counter2-=2;
+            }
+        } else {
+            for(int i=0;i<buffer.getLength();i++){
+                buffer.setRGB(i, 0, 0, 0);
+            }
+            for(int i=0;i<4;i++) {
+                buffer.setRGB(counter1, r, g, b);
+                buffer.setRGB((counter1+1), r, g, b);
+                buffer.setRGB(counter2, r, g, b);
+                buffer.setRGB((counter2-1), r, g, b);
+                counter1+=2;
+                counter2-=2;
+            }
+            for(int i=15;i>20-chargeBar;i--) {
+                buffer.setRGB(i, r, g, b);
+            }
+        }
+        led.setData(buffer);
+    }
+
+    public void charge(int r, int g, int b, double input) { // from 24->31&23->16, then 15->0 
+        int chargeBar = MathUtility.clamp((int)Math.abs((input * 20)), 0, 20);
         int counter1 = 24;
         int counter2 = 23;
         if(chargeBar <= 4) {

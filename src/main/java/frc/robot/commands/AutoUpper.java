@@ -57,19 +57,12 @@ public class AutoUpper extends Command{
                     else s_Upper.blink(12,41,235);
                     if(s_Upper.hasNote()) state = UpperState.DEFAULT;
                     break;
-                case CENTERBASE:
-                    elbowAngle = UpperConstants.ELBOW_CENTERBASE_POS;
+                case BASE:
+                    elbowAngle = UpperConstants.ELBOW_BASE_POS;
                     intakeSpeed = 0;
                     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
                     if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(0,255,0);
-                    else s_Upper.charge(255,0,0);
-                    break;
-                case SIDEBASE:
-                    elbowAngle = UpperConstants.ELBOW_SIDEBASE_POS;
-                    intakeSpeed = 0;
-                    shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                    if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(0,255,0);
-                    else s_Upper.charge(255,0,0);
+                    else s_Upper.charge(255,0,0, false);
                     break;
                 case SHOOT:
                     intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;

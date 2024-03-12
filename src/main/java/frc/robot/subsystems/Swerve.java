@@ -121,6 +121,13 @@ public class Swerve extends SubsystemBase {
     gyro4.setYaw(0);
   }
 
+  public void setGyro(double pos) {
+    gyro1.setYaw(pos);
+    gyro2.setYaw(pos);
+    gyro3.setYaw(pos);
+    gyro4.setYaw(pos);
+  }
+
   public Rotation2d getYaw(){
     StatusSignal<Double> gyro1Yaw = gyro1.getYaw();
     StatusSignal<Double> gyro2Yaw = gyro2.getYaw();
