@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
     }
     m_Swerve.setDefaultCommand(teleopSwerve);
     m_upper.setDefaultCommand(teleopUpper);
+    m_vision.setDefaultCommand(null);
   }
 
   @Override

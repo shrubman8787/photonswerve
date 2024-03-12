@@ -20,8 +20,8 @@ import frc.robot.Constants.robotConstants;
 
 public class UpperSub extends SubsystemBase{
         
-    private final TalonFX leftElbow = new TalonFX(UpperConstants.leftElbowMotorID, robotConstants.canbusName);
-    private final TalonFX rightElbow = new TalonFX(UpperConstants.rightElbowMotorID, robotConstants.canbusName);
+    private final TalonFX leftElbow = new TalonFX(UpperConstants.leftElbowMotorID);
+    private final TalonFX rightElbow = new TalonFX(UpperConstants.rightElbowMotorID);
     
     private final CANSparkMax leftShooter = new CANSparkMax(UpperConstants.leftShooterMotorID, MotorType.kBrushless);
     private final CANSparkMax rightShooter = new CANSparkMax(UpperConstants.rightShooterMotorID, MotorType.kBrushless);

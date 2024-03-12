@@ -18,28 +18,30 @@ public class Autos {
 
     public SequentialCommandGroup X2Y2Z3_r(Swerve s_Swerve, UpperSub s_Upper, VisionSub s_Vision) {
         return new SequentialCommandGroup(
-            new AutoUpper(s_Upper, UpperState.SPEAKER),
-            new AutoUpper(s_Upper, -0.204589, -1, 1, 0.5),
+            new AutoUpper(s_Upper, UpperState.SPEAKER), // hey yo broooooo qhTA GOING ON HERE damn m3
+            new AutoUpper(s_Upper, -0.2, -1, 1, 0.5),
+            new AutoUpper(s_Upper, -0.236328, 0.05, 0.3, 0.5), //delayyy :thumbs_up:
+            
             new ParallelRaceGroup(
-                new AutoSwerve(s_Swerve, -0.92, 0, 0),
-                new AutoUpper(s_Upper, -0.236328, 0.03, 0.3, 5)
+                new AutoSwerve(s_Swerve, -1.3, 0, 0),
+                new AutoUpper(s_Upper, -0.236328, 0.03, 0.5, 5)
             ),
             new AutoUpper(s_Upper, -0.16, -1, 0, 1.5),
-            new AutoUpper(s_Upper, -0.16, -1, 1, 0.5),
-            new ParallelRaceGroup(
-                new AutoSwerve(s_Swerve, -6.68, 1.57, 0),
-                new AutoUpper(s_Upper, -0.236328, 0.03, 0.3, 5)
-            ),
-            new ParallelRaceGroup(
-                new AutoSwerve(s_Swerve, -4, 1.57, 0),
-                new AutoUpper(s_Upper, -0.204589, -1, 0, 5)
-            ),
-            new ParallelRaceGroup(
-                new AutoSwerve(s_Swerve, 0, 0, 0),
-                new AutoUpper(s_Upper, -0.204589, -1, 0, 5)
-            ),
-            new AutoUpper(s_Upper, -0.204589, -1, 1, 0.5)
-        );
+            new AutoUpper(s_Upper, -0.16, -1, 1, 0.5)
+        //     new ParallelRaceGroup(
+        //         new AutoSwerve(s_Swerve, -6.68, 1.57, 0),
+        //         new AutoUpper(s_Upper, -0.236328, 0.03, 0.3, 5)
+        //     ),
+        //     new ParallelRaceGroup(
+        //         new AutoSwerve(s_Swerve, -4, 1.57, 0),
+        //         new AutoUpper(s_Upper, -0.204589, -1, 0, 5)
+        //     ),
+        //     new ParallelRaceGroup(
+        //         new AutoSwerve(s_Swerve, 0, 0, 0),
+        //         new AutoUpper(s_Upper, -0.204589, -1, 0, 5)
+        //     ),
+        //     new AutoUpper(s_Upper, -0.204589, -1, 1, 0.5)
+         );
     }
 
     // public SequentialCommandGroup X2Y1Y2Y3_r(Swerve s_Swerve, UpperSub s_Upper, VisionSub s_Vision1) {
@@ -60,14 +62,14 @@ public class Autos {
     public SequentialCommandGroup X1Y1_r(Swerve s_Swerve, UpperSub s_Upper, VisionSub vision) {
         return new SequentialCommandGroup(
             new AutoUpper(s_Upper, UpperState.SPEAKER),
-            new AutoUpper(s_Upper, -0.204589, -1, 1, 0.5),
+            new AutoUpper(s_Upper, -0.2, -1, 1, 0.5),
             new ParallelRaceGroup(
                 new AutoSwerve(s_Swerve, -1.07, -1.20, 0.16),
                 new AutoUpper(s_Upper, -0.236328, 0.03, 0.3, 5)
             ),
             new ParallelCommandGroup(
                 new AutoSwerve(s_Swerve, -1.03, -1.12, 0.07),
-                new AutoUpper(s_Upper, -0.204589, 0, 0, 1.5)
+                new AutoUpper(s_Upper, -0.2, 0, 0, 1.5)
             ),
             new AutoUpper(s_Upper, -0.16, -1, 0, 1.5),
             new AutoUpper(s_Upper, -0.16, -1, 1, 0.5)
