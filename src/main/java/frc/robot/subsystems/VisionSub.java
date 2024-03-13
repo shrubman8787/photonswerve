@@ -124,10 +124,10 @@ public class VisionSub extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("RobotPose_X", getRobotX());
-        SmartDashboard.putNumber("RobotPose_Y", getRobotY());
-        SmartDashboard.putNumber("RobotPose_r", getRobotDEG());
-        SmartDashboard.putNumber("tx", getTx());
-        SmartDashboard.putBoolean("HasTarget", hasTarget());
+        // SmartDashboard.putNumber("RobotPose_X", getRobotX());
+        // SmartDashboard.putNumber("RobotPose_Y", getRobotY());
+        // SmartDashboard.putNumber("RobotPose_r", getRobotDEG());
+        // SmartDashboard.putNumber("tx", getTx());
+        // SmartDashboard.putBoolean("HasTarget", hasTarget());
     }
 }

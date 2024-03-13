@@ -27,7 +27,6 @@ public class AutoSwerve extends Command{
         this.z = z;
         this.facing = facing;
         addRequirements(swerve);
-        addRequirements(vision);
     }
 
     @Override

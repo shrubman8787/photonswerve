@@ -17,6 +17,8 @@ public class AutoUpper extends Command{
     private double shooterSpeed;
 
     private double time, lastTime;
+    private boolean loadCheck;
+    private boolean loaded;
 
     private final PID elbowPID = new PID(
         UpperConstants.elbowKP, 
@@ -32,17 +34,19 @@ public class AutoUpper extends Command{
         addRequirements(s_Upper);
     }
 
-    public AutoUpper(UpperSub s_Upper, double elbowAngle, double shooterSpeed, double intakeSpeed, double time) {
+    public AutoUpper(UpperSub s_Upper, double elbowAngle, double shooterSpeed, double intakeSpeed, double time, boolean loadCheck) {
         this.s_Upper = s_Upper;
         this.elbowAngle = elbowAngle;
         this.shooterSpeed = shooterSpeed;
         this.intakeSpeed = intakeSpeed;
         this.time = time;
+        this.loadCheck = loadCheck;
     }
 
     @Override
     public void initialize() {
         lastTime = Timer.getFPGATimestamp();
+        if(loadCheck) loaded = s_Upper.hasNote();
     }
 
     @Override
@@ -91,7 +95,9 @@ public class AutoUpper extends Command{
         if(state != null) {
             if(Math.abs(elbowAngle - s_Upper.getElbowRotation()) < 0.005 && Math.abs(s_Upper.getShooterRPM()) >= UpperConstants.SHOOTER_LEGAL_SPEED) return true;
         } else {
-            if(Timer.getFPGATimestamp() - lastTime > time) return true;
+            if(loadCheck){
+                if(s_Upper.hasNote() == !loaded || Timer.getFPGATimestamp() - lastTime > time) return true;
+            }else if(Timer.getFPGATimestamp() - lastTime > time) return true;
         }
         return false;
     }

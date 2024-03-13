@@ -45,17 +45,17 @@ public class Robot extends TimedRobot {
     m_Alliance.setDefaultOption("RED", "RED");
     m_Alliance.addOption("BLUE", "BLUE");
 
-    // left=L mid=M right=R base=B red=r blue=b
+    // left=L mid=M right=R base=B red=r blue=b   combination -> initial pos(L,M,B)+base or not(B or N)+preload and note place(PXaYb,(a=1,2,3... , b=1,2,3...))+how many notes(xn, x=1, 2, 3...)+red or blue(r,b)
     // 1 note
-    m_AutoCommand.setDefaultOption("left1n", "left1n");
-    m_AutoCommand.addOption("mid1n", "mid1n");
-    m_AutoCommand.addOption("right1n", "right1n");
+    m_AutoCommand.setDefaultOption("LBP1nrb", "LBP1nrb");
+    m_AutoCommand.addOption("MBP1nrb", "MBP1nrb");
+    m_AutoCommand.addOption("RBP1nrb", "RBP1nrb");
 
     // 2 note
-    m_AutoCommand.addOption("midB2nb", "midB2nb");
+    m_AutoCommand.addOption("MBPX22nb", "MBPX22nb");
 
     // 3 note
-    m_AutoCommand.addOption("leftB3nb", "leftB3nb");
+    m_AutoCommand.addOption("MBPX2X13nb", "MBPX2X13nb");
 
     SmartDashboard.putData("Alliance Team", m_Alliance);
     SmartDashboard.putData("Auto Path", m_AutoCommand);
@@ -91,13 +91,13 @@ public class Robot extends TimedRobot {
     if(alliance == "RED") {
       switch(command){
         // 1 note
-        case "left1n":
+        case "LBP1nrb":
           m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
           break;
-        case "mid1n":
+        case "MBP1nrb":
           m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
           break;
-        case "right1n":
+        case "RBP1nrb":
           m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
           break;
 
@@ -108,24 +108,24 @@ public class Robot extends TimedRobot {
     } else if(alliance == "BLUE") {
       switch(command){
         // 1 note
-        case "left1n":
+        case "LBP1nrb":
           m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
           break;
-        case "mid1n":
+        case "MBP1nrb":
           m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
           break;
-        case "right1n":
+        case "RBP1nrb":
           m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
           break;
 
         // 2 note
-        case "midB2nb":
+        case "MBPX22nb":
           m_autonomousCommand = new Autos().MidX2Base_b2n(m_Swerve, m_upper, m_vision);
           break;
 
         // 3 note
-        case "leftB3nb":
-          m_autonomousCommand = new Autos().LeftX1Y1Base_b3n(m_Swerve, m_upper, m_vision);
+        case "MBPX2X13nb":
+          m_autonomousCommand = new Autos().MidX2BaseX1Base_b3n(m_Swerve, m_upper, m_vision);
           break;
         
         default:

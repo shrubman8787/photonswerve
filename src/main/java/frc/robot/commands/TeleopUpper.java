@@ -22,6 +22,7 @@ public class TeleopUpper extends Command{
     private int counter = 0;
     private boolean oneTime = false;
     private boolean endGaming = false;
+    private boolean isTrap = false;
 
     private final PID elbowPID = new PID(
         UpperConstants.elbowKP,
@@ -60,6 +61,8 @@ public class TeleopUpper extends Command{
             endGaming = true;
         }
         if(controller.getStartButtonReleased()) oneTime = false;
+
+        isTrap = Constants.state == UpperState.TRAP ? true : false;
 
         if(endGaming) {
             if(counter == 0) Constants.state = UpperState.DEFAULT;
@@ -123,7 +126,7 @@ public class TeleopUpper extends Command{
                 break;
             case SHOOT:
                 intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
-                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+                shooterSpeed = isTrap ? UpperConstants.SHOOTER_TRAP_SPEED : UpperConstants.SHOOTER_SHOOT_SPEED;
                 s_Upper.blink(0,255,0);
                 break;
             case TELE:

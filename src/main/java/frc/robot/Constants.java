@@ -219,16 +219,17 @@ public final class Constants {
     public static final double ELBOW_AMP_POS = 0.037109; // 1.0.012939 2.-0.002197
     public static final double ELBOW_BASE_POS = -0.2;
     public static final double ELBOW_TRANSPORT_POS = -0.070312; // need to test
-    public static final double ELBOW_TRAP_POS = -0.236328;
+    public static final double ELBOW_TRAP_POS = -0.226328;
     public static final double ELBOW_PREENDGAME_POS = 0.05;
 
     public static final double INTAKE_HOLD_SPEED = 0;
-    public static final double INTAKE_GROUND_SPEED = 0.35;
+    public static final double INTAKE_GROUND_SPEED = 0.3;
     public static final double INTAKE_SHOOT_SPEED = 1;
 
     public static final double SHOOTER_GROUND_SPEED = 0.03;
-    public static final double SHOOTER_TRAP_SPEED = -0.3;
+    public static final double SHOOTER_TRAP_SPEED = -0.35;
     public static final double SHOOTER_SHOOT_SPEED = -1;
+    public static final double SHOOTER_HOLD_SPEED = 0;
     public static final double SHOOTER_LEGAL_SPEED = 5000;
 
     public static boolean teleMode = false;
@@ -241,52 +242,17 @@ public final class Constants {
     // auto position values
     // global
     public static final double shootingTime = 0.5;
-    public static final double intakeTime = 5;
+    public static final double intakeTime = 3;
     public static final double holdTime = 3;
 
     // left speaker
-    public static final double leftSpeakerX = 0;
-    public static final double leftSpeakerY = 0;
-    public static final double leftSpeakerZ = 0;
     public static final double leftSpeakerOffset = 30;
 
     // mid speaker
-    public static final double midSpeakerX = 0;
-    public static final double midSpeakerY = 0;
-    public static final double midSpeakerZ = 0;
     public static final double midSpeakerOffset = 0;
 
     // right speaker
-    public static final double rightSpeakerX = 0;
-    public static final double rightSpeakerY = 0;
-    public static final double rightSpeakerZ = 0;
     public static final double rightSpeakerOffset = -30;
-    
-    // X1
-    public static final double BX1X = -1.377;
-    public static final double BX1Y = 2;
-    public static final double BX1Z = 30;
-    
-    // X2
-    public static final double BX2X = -1.3;
-    public static final double BX2Y = 0;
-    public static final double BX2Z = 0;
-    
-    // X3
-    public static final double BX3X = -6.102;
-    public static final double BX3Y = 2.637;
-    public static final double BX3Z = -150.33;
-
-    // Y1
-    public static final double BY1X = 0;
-    public static final double BY1Y = 0;
-    public static final double BY1Z = 0;
-    
-    // Y2
-    public static final double BY2X = 0;
-    public static final double BY2Y = 0;
-    public static final double BY2Z = 0;
-
 
     // public static final double areaLength = 0.963483; // meters
     // public static final double areaWidth = 3.623018; // meterss
