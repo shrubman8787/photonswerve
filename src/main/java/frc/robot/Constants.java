@@ -29,19 +29,27 @@ public final class Constants {
   public static final class robotConstants {
     public static final String canbusName = "GTX7130";
     public static final int DriverControllerID = 0;
+    public static String mode = "DISABLED";
   }
 
-  public enum UpperState {
+  public static enum UpperState {
     DEFAULT,
     GROUND,
     AMP,
-    SPEAKER,
+    BASE,
+    FAR,
+    TRANSPORT,
+    FLIGHT,
     SHOOT,
-    TELE,
+    TRAP,
+    NULL,
+    PREENDGAME,
     ENDGAME
   }
 
-  public static final class Swerve {
+  public static UpperState state;
+
+  public static final class SwerveConstants {
     public static final double axisDeadBand = 0.05; // make sure ur robot won't vibrate cuz the joystick gives a input like 0.002 or sth
     public static final int pigeon1 = 13; // advanced gyro
     public static final int pigeon2 = 14;
@@ -52,6 +60,7 @@ public final class Constants {
     /* Drivetrain Constants */
     public static final double trackWidth = 0.583; // meters, length between two side's wheels, need to adjust
     public static final double wheelBase = 0.583; // meters, length between same side's wheels, need to adjust
+    public static final double driveBaseRaius = 0.35234;
     public static final double wheelDiameter = Units.inchesToMeters(4.0); // need to adjust
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -77,7 +86,15 @@ public final class Constants {
 
     /* Angle Motor PID Values */
     public static final double angleKP = 0.01;
+    public static final double angleKI = 0.0;
     public static final double angleKD = 0.0; // maybe need to adjust
+
+    /* Angle Motor Auto-Facing PID Values */
+    public static final double faceKP = 0.8;
+    public static final double faceKI = 0.0;
+    public static final double faceKD = 0.1;
+    public static final double faceiWindup = 0.0;
+    public static final double faceiLimit = 0;
 
     /* Drive Motor PID Values */
     public static final double driveKP = 0.12;
@@ -147,7 +164,7 @@ public final class Constants {
       public static final int driveMotorID = 1;
       public static final int angleMotorID = 2;
       public static final int canCoderID = 12;
-      public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.025879);
+      public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.113281);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
@@ -173,7 +190,6 @@ public final class Constants {
   }
 
   public static final class UpperConstants {
-
     public static final int rightLimitSwitchID = 8;
     public static final int LeftLimitSwitchID = 7;
 
@@ -183,7 +199,6 @@ public final class Constants {
     public static final int rightShooterMotorID = 20;
     public static final int elbowCancoderID = 19;
     public static final int intakeMotorID = 22;
-    // public static final int shooterCancoderID = 1;
 
     public static final double shooter_arm_Angle = 135;
 
@@ -194,30 +209,50 @@ public final class Constants {
     public static final double elbowiLimit = 0.0;
 
     public static final double shooterKP = 0.0;
-    public static final double shooterKI = 0.0;
+    public static final double shooterKI = 0.0; // test
     public static final double shooterKD = 0.0;
-    public static final double shooteriWindup = 0.0;
-    public static final double shooteriLimit = 0.0;
+    public static final double shooteriWindup = 0.0; // test
+    public static final double shooteriLimit = 0.0; // test
 
     public static final double ELBOW_DEFAULT_POS = -0.002197;
-    public static final double ELBOW_GROUND_POS = -0.236328;
-    public static final double ELBOW_AMP_POS = 0.012939;
-    public static final double ELBOW_SPEAKER_POS = -0.204589;
+    public static final double ELBOW_GROUND_POS = -0.24;
+    public static final double ELBOW_AMP_POS = 0.037109; // 1.0.012939 2.-0.002197
+    public static final double ELBOW_BASE_POS = -0.2;
+    public static final double ELBOW_FAR_POS = -0.185;
+    public static final double ELBOW_TRANSPORT_POS = -0.070312; // need to test
+    public static final double ELBOW_TRAP_POS = -0.226328;
+    public static final double ELBOW_PREENDGAME_POS = 0.075;
 
-    public static final double INTAKE_GROUND_SPEED = 0.3;
+    public static final double INTAKE_HOLD_SPEED = 0;
+    public static final double INTAKE_GROUND_SPEED = 0.35;
     public static final double INTAKE_SHOOT_SPEED = 1;
 
-    public static final double SHOOTER_GROUND_SPEED = 0.02;
+    public static final double SHOOTER_GROUND_SPEED = 0.03;
+    public static final double SHOOTER_TRAP_SPEED = -0.35;
     public static final double SHOOTER_SHOOT_SPEED = -1;
+    public static final double SHOOTER_HOLD_SPEED = 0;
     public static final double SHOOTER_LEGAL_SPEED = 5000;
 
     public static boolean teleMode = false;
-  }
-  
 
-  public static final class LedContants {
-    public static final int ledLenfth = 31;
+    public static final int ledLength = 33; // need to change
     public static final int ledPwmPort = 7;
   }
 
+  public static final class FieldConstants {
+    // auto position values
+    // global
+    public static final double shootingTime = 0.5;
+    public static final double intakeTime = 3;
+    public static final double holdTime = 3;
+
+    // left speaker
+    public static final double leftSpeakerOffset = 30;
+
+    // mid speaker
+    public static final double midSpeakerOffset = 0;
+
+    // right speaker
+    public static final double rightSpeakerOffset = -30;
+  }
 }

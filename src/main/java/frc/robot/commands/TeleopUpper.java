@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.ChenryLib.PID;
+import frc.robot.Constants;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.UpperState;
 import frc.robot.subsystems.UpperSub;
@@ -12,15 +13,17 @@ public class TeleopUpper extends Command{
 
     private final UpperSub s_Upper;
     private final XboxController controller;
-
-    private UpperState state;
     
     private double elbowAngle;
     private double intakeSpeed;
     private double shooterSpeed;
+    private int counter = 0;
+    private boolean oneTime = false;
+    private boolean endGaming = false;
+    private boolean isTrap = false;
 
     private final PID elbowPID = new PID(
-        UpperConstants.elbowKP, 
+        UpperConstants.elbowKP,
         UpperConstants.elbowKI,
         UpperConstants.elbowKD,
         UpperConstants.elbowiWindup,
@@ -35,37 +38,53 @@ public class TeleopUpper extends Command{
 
     @Override
     public void initialize() {
-        state = UpperState.DEFAULT;
+        Constants.state = UpperState.DEFAULT;
     }
 
     @Override
     public void execute() {
 
-        if(state != UpperState.TELE) {
-            if(controller.getYButtonPressed()) state = state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND;
-            if(controller.getXButtonPressed()) state = state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP;
-            if(controller.getAButtonPressed()) state = state == UpperState.SPEAKER ? UpperState.DEFAULT : UpperState.SPEAKER;
-            if(controller.getRightTriggerAxis() > 0.01) state = UpperState.SHOOT;
-            if(controller.getRightTriggerAxis() < 0.01 && state == UpperState.SHOOT) state = UpperState.TELE;
-            if(controller.getStartButtonPressed()) state = state == UpperState.ENDGAME ? UpperState.DEFAULT : UpperState.ENDGAME;
+        // auto-aiming temporarily not using
+        if(controller.getYButtonPressed()) Constants.state = Constants.state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND; endGaming = false;
+        if(controller.getXButtonPressed()) Constants.state = Constants.state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP; endGaming = false;
+        if(controller.getAButtonPressed()) Constants.state = Constants.state == UpperState.BASE ? UpperState.DEFAULT : UpperState.BASE; endGaming = false;
+        if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.FAR ? UpperState.DEFAULT : UpperState.FAR; endGaming = false;
+        if(controller.getLeftBumperPressed()) Constants.state = Constants.state == UpperState.TRANSPORT ? UpperState.DEFAULT : UpperState.TRANSPORT; endGaming = false;
+        if(controller.getRightBumperPressed()) Constants.state = Constants.state == UpperState.FLIGHT ? UpperState.FLIGHT : UpperState.FLIGHT; endGaming = false;
+        if(controller.getRightTriggerAxis() > 0.01) Constants.state = UpperState.SHOOT; endGaming = false;
+        if(controller.getRightTriggerAxis() < 0.01 && Constants.state == UpperState.SHOOT) Constants.state = UpperState.NULL;
+        if(controller.getStartButtonPressed() && oneTime == false) {
+            counter = counter==2 ? 0 : counter+1;
+            oneTime = true;
+            endGaming = true;
+        }
+        if(controller.getStartButtonReleased()) oneTime = false;
+
+        isTrap = Constants.state == UpperState.TRAP ? true : false;
+
+        if(endGaming) {
+            if(counter == 0) Constants.state = UpperState.DEFAULT;
+            if(counter == 1) Constants.state = UpperState.PREENDGAME;
+            if(counter == 2) Constants.state = UpperState.ENDGAME;
         }
 
-        if(controller.getLeftBumperPressed()) state = state == UpperState.TELE ? UpperState.DEFAULT : UpperState.TELE;
+        // if(controller.getLeftBumperPressed()) Constants.state = Constants.state == UpperState.TELE ? UpperState.DEFAULT : UpperState.TELE;
 
-        switch (state) {
+        switch (Constants.state) {
             case DEFAULT:
                 elbowAngle = UpperConstants.ELBOW_DEFAULT_POS;
                 intakeSpeed = 0;
                 shooterSpeed = 0;
-                s_Upper.setLED(232, 213, 245);
-                break;
+                if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(232, 213, 245);
+                else s_Upper.charge(255, 0, 0, false);
+                break;  
             case GROUND:
                 elbowAngle = UpperConstants.ELBOW_GROUND_POS;
                 intakeSpeed = s_Upper.hasNote() ? 0: UpperConstants.INTAKE_GROUND_SPEED;
                 shooterSpeed = UpperConstants.SHOOTER_GROUND_SPEED;
                 if(s_Upper.hasNote()) s_Upper.setLED(12,41,235);
                 else s_Upper.blink(12,41,235);
-                if(s_Upper.hasNote()) state = UpperState.DEFAULT;
+                if(s_Upper.hasNote()) Constants.state = UpperState.DEFAULT;
                 break;
             case AMP:
                 elbowAngle = UpperConstants.ELBOW_AMP_POS;
@@ -73,34 +92,64 @@ public class TeleopUpper extends Command{
                 shooterSpeed = 0;
                 s_Upper.setLED(255, 255, 0);
                 break;
-            case SPEAKER:
-                elbowAngle = UpperConstants.ELBOW_SPEAKER_POS;
+            case BASE:
+                elbowAngle = UpperConstants.ELBOW_BASE_POS;
                 intakeSpeed = 0;
                 shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(255,0,0);
-                else s_Upper.setLED(0,255,0);
+                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
+                else s_Upper.charge(255,0,0, false);
+                break;
+            case FAR:
+                elbowAngle = UpperConstants.ELBOW_FAR_POS;
+                intakeSpeed = 0;
+                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
+                else s_Upper.charge(255,0,0, false);
+                break;
+            case TRANSPORT:
+                elbowAngle = UpperConstants.ELBOW_TRANSPORT_POS;
+                intakeSpeed = 0;
+                shooterSpeed = 0;
+                // s_Upper.setLED(183, 69, 255);
+                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
+                else s_Upper.charge(255, 0, 0, false);
+                break;
+            case FLIGHT:
+                elbowAngle = UpperConstants.ELBOW_GROUND_POS;
+                intakeSpeed = 0;
+                shooterSpeed = 0;
+                s_Upper.setLED(255, 255, 255);
+                break;
+            case TRAP:
+                elbowAngle = UpperConstants.ELBOW_TRAP_POS;
+                intakeSpeed = 0;
+                shooterSpeed = UpperConstants.SHOOTER_TRAP_SPEED;
+                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
+                else s_Upper.charge(255, 0, 0, true);
                 break;
             case SHOOT:
                 intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
-                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                s_Upper.blink(255,0,0);
+                shooterSpeed = isTrap ? UpperConstants.SHOOTER_TRAP_SPEED : UpperConstants.SHOOTER_SHOOT_SPEED;
+                s_Upper.blink(0,255,0);
                 break;
-            case TELE:
-                // if(controller.getLeftTriggerAxis() > 0.99) elbowAngle += 0.000976;
-                // if(controller.getRightTriggerAxis() > 0.99) elbowAngle -= 0.000976;
-                // if(controller.getXButton()) shooterSpeed = -1;
-                // else shooterSpeed = 0;
-                // if(controller.getBButton()) intakeSpeed = 1;
-                // else intakeSpeed = 0;
+            case NULL:
                 shooterSpeed = 0;
                 intakeSpeed = 0;
-                s_Upper.setLED(100, 100, 200);
+                if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(100, 200, 200);
+                else s_Upper.charge(255, 0, 0, false);
+                break;
+            case PREENDGAME:
+                elbowAngle = UpperConstants.ELBOW_PREENDGAME_POS;
+                shooterSpeed = 0;
+                intakeSpeed = 0;
+                s_Upper.setLED(87, 169, 254);
                 break;
             case ENDGAME:
                 elbowAngle = UpperConstants.ELBOW_GROUND_POS;
                 intakeSpeed = 0;
                 shooterSpeed = 0;
-                s_Upper.setLED(154, 0, 243);
+                s_Upper.setLED(87, 169, 254);
                 break;
         }
 
@@ -108,12 +157,12 @@ public class TeleopUpper extends Command{
         s_Upper.setShooter(shooterSpeed);
         s_Upper.setIntake(intakeSpeed);
 
-        SmartDashboard.putString("UpperState", state.toString());
+        SmartDashboard.putString("UpperState", Constants.state.toString());
     }
 
     @Override
     public void end(boolean interrupted) {
-        
+        System.out.println("bro ur teleop upper is fucked");
     }
 
     @Override

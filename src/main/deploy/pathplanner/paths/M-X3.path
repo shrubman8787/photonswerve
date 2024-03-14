@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.87,
-        "y": 5.55
+        "x": 1.7911705778568514,
+        "y": 4.859314471992173
       },
       "isLocked": false,
       "linkedName": "MB"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.45,
-        "y": 7.0
+        "y": 4.11
       },
       "prevControl": {
-        "x": 1.9500000000000002,
-        "y": 7.0
+        "x": 1.6347153770540732,
+        "y": 4.334729386947563
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.37,
+        "x": 2.45,
         "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.87,
-        "y": 5.55
+        "x": 1.846390060493126,
+        "y": 6.3226307618534525
       },
       "isLocked": false,
-      "linkedName": "MB"
+      "linkedName": "X2"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 7.0
       },
       "prevControl": {
-        "x": 1.9500000000000002,
-        "y": 7.0
+        "x": 1.3862277051908372,
+        "y": 6.976061306382703
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "L-X1"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MiddleStarting",
+  "folder": "X2",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

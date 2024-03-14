@@ -17,6 +17,8 @@ public class AutoUpper extends Command{
     private double shooterSpeed;
 
     private double time, lastTime;
+    private boolean loadCheck;
+    private boolean loaded;
 
     private final PID elbowPID = new PID(
         UpperConstants.elbowKP, 
@@ -32,17 +34,19 @@ public class AutoUpper extends Command{
         addRequirements(s_Upper);
     }
 
-    public AutoUpper(UpperSub s_Upper, double elbowAngle, double shooterSpeed, double intakeSpeed, double time) {
+    public AutoUpper(UpperSub s_Upper, double elbowAngle, double shooterSpeed, double intakeSpeed, double time, boolean loadCheck) {
         this.s_Upper = s_Upper;
         this.elbowAngle = elbowAngle;
         this.shooterSpeed = shooterSpeed;
         this.intakeSpeed = intakeSpeed;
         this.time = time;
+        this.loadCheck = loadCheck;
     }
 
     @Override
     public void initialize() {
         lastTime = Timer.getFPGATimestamp();
+        if(loadCheck) loaded = s_Upper.hasNote();
     }
 
     @Override
@@ -57,17 +61,17 @@ public class AutoUpper extends Command{
                     else s_Upper.blink(12,41,235);
                     if(s_Upper.hasNote()) state = UpperState.DEFAULT;
                     break;
-                case SPEAKER:
-                    elbowAngle = UpperConstants.ELBOW_SPEAKER_POS;
+                case BASE:
+                    elbowAngle = UpperConstants.ELBOW_BASE_POS;
                     intakeSpeed = 0;
                     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                    if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(255,0,0);
-                    else s_Upper.setLED(0,255,0);
+                    if(Math.abs(s_Upper.getShooterRPM()) > 5000) s_Upper.setLED(0,255,0);
+                    else s_Upper.charge(255,0,0, false);
                     break;
                 case SHOOT:
                     intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
                     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                    s_Upper.blink(255,0,0);
+                    s_Upper.blink(0,255,0);
                     break;
                 default:
                     break;
@@ -81,17 +85,19 @@ public class AutoUpper extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        s_Upper.setElbow(0);
-        s_Upper.setShooter(0);
-        s_Upper.setIntake(0);
+        s_Upper.setElbow(-elbowPID.calculate(elbowAngle - s_Upper.getElbowRotation()));
+        s_Upper.setShooter(shooterSpeed);
+        s_Upper.setIntake(intakeSpeed);
     }
 
     @Override
     public boolean isFinished() {
         if(state != null) {
-            if(Math.abs(elbowAngle - s_Upper.getElbowRotation()) < 0.005) return true;
+            if(Math.abs(elbowAngle - s_Upper.getElbowRotation()) <= 0.0075 && Math.abs(s_Upper.getShooterRPM()) >= UpperConstants.SHOOTER_LEGAL_SPEED) return true;
         } else {
-            if(Timer.getFPGATimestamp() - lastTime > time) return true;
+            if(loadCheck){
+                if(s_Upper.hasNote() == !loaded || Timer.getFPGATimestamp() - lastTime > time) return true;
+            }else if(Timer.getFPGATimestamp() - lastTime > time) return true;
         }
         return false;
     }

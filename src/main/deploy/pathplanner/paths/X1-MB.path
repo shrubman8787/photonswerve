@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.37,
-        "y": 5.55
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.87,
-        "y": 5.55
-      },
-      "isLocked": false,
-      "linkedName": "MB"
-    },
-    {
-      "anchor": {
         "x": 2.45,
         "y": 7.0
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.113284226568454,
+        "y": 6.359443750277634
+      },
+      "isLocked": false,
+      "linkedName": "L-X1"
+    },
+    {
+      "anchor": {
+        "x": 1.37,
+        "y": 5.55
+      },
       "prevControl": {
-        "x": 1.9500000000000002,
-        "y": 7.0
+        "x": 1.8371868133870803,
+        "y": 6.074143089990216
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MB"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MiddleStarting",
+  "folder": "X1",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
