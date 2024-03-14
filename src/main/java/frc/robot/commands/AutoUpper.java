@@ -85,15 +85,15 @@ public class AutoUpper extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        s_Upper.setElbow(0);
-        s_Upper.setShooter(0);
-        s_Upper.setIntake(0);
+        s_Upper.setElbow(-elbowPID.calculate(elbowAngle - s_Upper.getElbowRotation()));
+        s_Upper.setShooter(shooterSpeed);
+        s_Upper.setIntake(intakeSpeed);
     }
 
     @Override
     public boolean isFinished() {
         if(state != null) {
-            if(Math.abs(elbowAngle - s_Upper.getElbowRotation()) < 0.005 && Math.abs(s_Upper.getShooterRPM()) >= UpperConstants.SHOOTER_LEGAL_SPEED) return true;
+            if(Math.abs(elbowAngle - s_Upper.getElbowRotation()) <= 0.0075 && Math.abs(s_Upper.getShooterRPM()) >= UpperConstants.SHOOTER_LEGAL_SPEED) return true;
         } else {
             if(loadCheck){
                 if(s_Upper.hasNote() == !loaded || Timer.getFPGATimestamp() - lastTime > time) return true;

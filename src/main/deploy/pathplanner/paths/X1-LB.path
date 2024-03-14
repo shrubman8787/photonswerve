@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.37,
-        "y": 5.55
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.87,
-        "y": 5.55
-      },
-      "isLocked": false,
-      "linkedName": "MB"
-    },
-    {
-      "anchor": {
         "x": 2.45,
         "y": 7.0
       },
-      "prevControl": {
+      "prevControl": null,
+      "nextControl": {
         "x": 1.9500000000000002,
         "y": 7.0
       },
+      "isLocked": false,
+      "linkedName": "L-X1"
+    },
+    {
+      "anchor": {
+        "x": 0.75,
+        "y": 6.75
+      },
+      "prevControl": {
+        "x": 1.25,
+        "y": 6.75
+      },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LB"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 60.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 60.37300786482361,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MiddleStarting",
+  "folder": "X1",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

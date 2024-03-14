@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.37,
-        "y": 5.55
+        "x": 7.848666424864946,
+        "y": 5.773442417070284
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.87,
-        "y": 5.55
+        "x": 6.981801945666672,
+        "y": 6.2674112792171774
       },
       "isLocked": false,
-      "linkedName": "MB"
+      "linkedName": "SP-Y2"
     },
     {
       "anchor": {
-        "x": 2.45,
-        "y": 7.0
+        "x": 5.794583068986767,
+        "y": 6.580321680822735
       },
       "prevControl": {
-        "x": 1.9500000000000002,
-        "y": 7.0
+        "x": 6.765761114862178,
+        "y": 6.609930767587229
+      },
+      "nextControl": {
+        "x": 4.285250543595257,
+        "y": 6.534305445292506
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.37,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 2.18691020341682,
+        "y": 5.917687889187438
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MB"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +59,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MiddleStarting",
+  "folder": "Y2",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

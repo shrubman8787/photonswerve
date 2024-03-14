@@ -4,39 +4,55 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.ChenryLib.PID;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.VisionSub;
 
 public class AutoSwerve extends Command{
     
     private final Swerve swerve;
-    private final VisionSub vision;
 
-    double x,y,z;
-    boolean facing;
+    double x,y,z,XWindup=0,YWindup=0,X,Y,XStart,YStart;
     Translation2d trans2d;
     double rotate2d;
+    boolean oneTimeX=false, oneTimeY=false;
 
     private final PID xyPID = new PID(3, 0, 1, 0, 0);
     private final PID zPID = new PID(5, 0, 4, 0, 0);
 
-    public AutoSwerve(Swerve swerve, VisionSub vision, double x, double y, double z, boolean facing) {
+    public AutoSwerve(Swerve swerve, double x, double y, double z) {
         this.swerve = swerve;
-        this.vision = vision;
         this.x = x;
         this.y = y;
         this.z = z;
-        this.facing = facing;
+        addRequirements(swerve);
+    }
+
+    public AutoSwerve(Swerve swerve, double x, double y, double z, double XWindup, double YWindup) { // XWindup use X activate Y, YWindup use Y activate X
+        this.swerve = swerve;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.XWindup = XWindup;
+        this.YWindup = YWindup;
         addRequirements(swerve);
     }
 
     @Override
     public void initialize() {
+        XStart = swerve.getPose().getX();
+        YStart = swerve.getPose().getY();
     }
 
     @Override
     public void execute() {
-        trans2d = new Translation2d(xyPID.calculate(x - swerve.getPose().getX()), xyPID.calculate(y - swerve.getPose().getY()));
-        rotate2d = facing ? vision.hasTarget() ? -vision.calculateAutoFacing() : -zPID.calculate(z - swerve.getPose().getRotation().getRotations()) : -zPID.calculate(z - swerve.getPose().getRotation().getRotations());
+        if(Math.abs(swerve.getPose().getY() - YStart) >= XWindup) {
+            if(oneTimeX) X = xyPID.calculate(x - swerve.getPose().getX());
+            else oneTimeX = true;
+        }else X = 0;
+        if(Math.abs(swerve.getPose().getX() - XStart) >= YWindup) {
+            if(oneTimeY) Y = xyPID.calculate(y - swerve.getPose().getY());
+            else oneTimeY = true;
+        }else Y = 0;
+        trans2d = new Translation2d(X*0.8, Y*0.8);
+        rotate2d =  -zPID.calculate(z - swerve.getPose().getRotation().getRotations());
         swerve.drive(trans2d, rotate2d, true, false);
     }
 

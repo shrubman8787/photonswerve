@@ -2,18 +2,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.ChenryLib.PID;
 import frc.robot.Robot;
-import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.robotConstants;
 
-public class VisionSub extends SubsystemBase{
+public class VisionSub extends SubsystemBase{ // not using now
     
     private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 

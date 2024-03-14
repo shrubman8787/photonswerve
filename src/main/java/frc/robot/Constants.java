@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -40,10 +37,11 @@ public final class Constants {
     GROUND,
     AMP,
     BASE,
+    FAR,
     TRANSPORT,
+    FLIGHT,
     SHOOT,
     TRAP,
-    TELE,
     NULL,
     PREENDGAME,
     ENDGAME
@@ -62,6 +60,7 @@ public final class Constants {
     /* Drivetrain Constants */
     public static final double trackWidth = 0.583; // meters, length between two side's wheels, need to adjust
     public static final double wheelBase = 0.583; // meters, length between same side's wheels, need to adjust
+    public static final double driveBaseRaius = 0.35234;
     public static final double wheelDiameter = Units.inchesToMeters(4.0); // need to adjust
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -87,6 +86,7 @@ public final class Constants {
 
     /* Angle Motor PID Values */
     public static final double angleKP = 0.01;
+    public static final double angleKI = 0.0;
     public static final double angleKD = 0.0; // maybe need to adjust
 
     /* Angle Motor Auto-Facing PID Values */
@@ -209,21 +209,22 @@ public final class Constants {
     public static final double elbowiLimit = 0.0;
 
     public static final double shooterKP = 0.0;
-    public static final double shooterKI = 0.0;
+    public static final double shooterKI = 0.0; // test
     public static final double shooterKD = 0.0;
-    public static final double shooteriWindup = 0.0;
-    public static final double shooteriLimit = 0.0;
+    public static final double shooteriWindup = 0.0; // test
+    public static final double shooteriLimit = 0.0; // test
 
     public static final double ELBOW_DEFAULT_POS = -0.002197;
-    public static final double ELBOW_GROUND_POS = -0.236328;
+    public static final double ELBOW_GROUND_POS = -0.24;
     public static final double ELBOW_AMP_POS = 0.037109; // 1.0.012939 2.-0.002197
     public static final double ELBOW_BASE_POS = -0.2;
+    public static final double ELBOW_FAR_POS = -0.185;
     public static final double ELBOW_TRANSPORT_POS = -0.070312; // need to test
     public static final double ELBOW_TRAP_POS = -0.226328;
-    public static final double ELBOW_PREENDGAME_POS = 0.05;
+    public static final double ELBOW_PREENDGAME_POS = 0.075;
 
     public static final double INTAKE_HOLD_SPEED = 0;
-    public static final double INTAKE_GROUND_SPEED = 0.3;
+    public static final double INTAKE_GROUND_SPEED = 0.35;
     public static final double INTAKE_SHOOT_SPEED = 1;
 
     public static final double SHOOTER_GROUND_SPEED = 0.03;
@@ -253,103 +254,5 @@ public final class Constants {
 
     // right speaker
     public static final double rightSpeakerOffset = -30;
-
-    // public static final double areaLength = 0.963483; // meters
-    // public static final double areaWidth = 3.623018; // meterss
-    // public static final double areaInitialXRed = 0; // need to adjust
-    // public static final double areaInitialYRed = 0; // need to adjust
-    // public static final double areaInitialXBlue = 0; // need to adjust
-    // public static final double areaInitialYBlue = 0; // need to adjust
-    // public static final int areaLengthCutPieces = 5;
-    // public static final int areaWidthCutPieces = 8;
-    // public static final double areaLengthPartial = areaLength / areaLengthCutPieces;
-    // public static final double areaWidthPartial = areaWidth / areaWidthCutPieces;
-
-    // // width cutting first then length
-    // public static final Map<Translation2d, Double> autoAimDataBlue = new HashMap<>(){{
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*0), 0.0); // initial
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*0, areaInitialYBlue + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*1, areaInitialYBlue + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*2, areaInitialYBlue + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*3, areaInitialYBlue + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXBlue + areaWidthPartial*4, areaInitialYBlue + areaLengthPartial*7), 0.0);
-    // }};
-
-    // public static final Map<Translation2d, Double> autoAimDataRed = new HashMap<>(){{
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*0), 0.0); // initial
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*0, areaInitialYRed + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*1, areaInitialYRed + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*2, areaInitialYRed + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*3, areaInitialYRed + areaLengthPartial*7), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*0), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*1), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*2), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*3), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*4), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*5), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*6), 0.0);
-    //   put(new Translation2d(areaInitialXRed + areaWidthPartial*4, areaInitialYRed + areaLengthPartial*7), 0.0);
-    // }}; // plus or minus will be tested
   }
 }

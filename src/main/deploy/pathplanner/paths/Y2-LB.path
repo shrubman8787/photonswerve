@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.37,
-        "y": 5.55
+        "x": 7.848666424864946,
+        "y": 5.773442417070284
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.87,
-        "y": 5.55
+        "x": 6.619028587557887,
+        "y": 6.2770083885388885
       },
       "isLocked": false,
-      "linkedName": "MB"
+      "linkedName": "SP-Y2"
     },
     {
       "anchor": {
-        "x": 2.45,
-        "y": 7.0
+        "x": 4.628186374775031,
+        "y": 6.75
       },
       "prevControl": {
-        "x": 1.9500000000000002,
-        "y": 7.0
+        "x": 5.125327458823238,
+        "y": 6.696607654561962
+      },
+      "nextControl": {
+        "x": 4.131045290726824,
+        "y": 6.803392345438038
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.75,
+        "y": 6.75
+      },
+      "prevControl": {
+        "x": 1.75,
+        "y": 6.75
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LB"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +55,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 60.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MiddleStarting",
+  "folder": "Y2",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

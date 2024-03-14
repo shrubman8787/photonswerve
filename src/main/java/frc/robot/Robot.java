@@ -4,13 +4,20 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.UpperState;
 import frc.robot.Constants.robotConstants;
+import frc.robot.commands.AutoUpper;
 import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TeleopUpper;
@@ -21,8 +28,6 @@ import frc.robot.subsystems.VisionSub;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
-
   private final Swerve m_Swerve = new Swerve();
   private final UpperSub m_upper = new UpperSub();
   private final VisionSub m_vision = new VisionSub();
@@ -30,20 +35,27 @@ public class Robot extends TimedRobot {
   private final XboxController driverController = new XboxController(robotConstants.DriverControllerID);
 
   private final TeleopSwerve teleopSwerve = new TeleopSwerve(m_Swerve, m_vision, driverController);
-  private final TeleopUpper teleopUpper = new TeleopUpper(m_upper, m_vision, driverController);
+  private final TeleopUpper teleopUpper = new TeleopUpper(m_upper, driverController);
 
   public static String alliance;
   private String command;
 
   SendableChooser<String> m_Alliance = new SendableChooser<>();
   SendableChooser<String> m_AutoCommand = new SendableChooser<>();
+  SendableChooser<Command> m_pathPlanner = new SendableChooser<>();
 
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer(m_Swerve, m_upper, m_vision);
-
+    
+    configurePathPlannerCommand(m_upper);
+    
     m_Alliance.setDefaultOption("RED", "RED");
     m_Alliance.addOption("BLUE", "BLUE");
+    m_Alliance.addOption("PATHPLANNER", "PATHPLANNER");
+
+    m_pathPlanner = AutoBuilder.buildAutoChooser("PathPlanner");
+
+    m_pathPlanner.setDefaultOption("", m_autonomousCommand);
 
     // left=L mid=M right=R base=B red=r blue=b   combination -> initial pos(L,M,B)+base or not(B or N)+preload and note place(PXaYb,(a=1,2,3... , b=1,2,3...))+how many notes(xn, x=1, 2, 3...)+red or blue(r,b)
     // 1 note
@@ -52,13 +64,26 @@ public class Robot extends TimedRobot {
     m_AutoCommand.addOption("RBP1nrb", "RBP1nrb");
 
     // 2 note
-    m_AutoCommand.addOption("MBPX22nb", "MBPX22nb");
+    m_AutoCommand.addOption("MBPX12n", "MBPX12n");
+    m_AutoCommand.addOption("MBPX22n", "MBPX22n");
+    m_AutoCommand.addOption("MBPX32n", "MBPX32n");
 
     // 3 note
-    m_AutoCommand.addOption("MBPX2X13nb", "MBPX2X13nb");
+    m_AutoCommand.addOption("MBPX2X13n", "MBPX2X13n");
+    m_AutoCommand.addOption("MBPX2X33n", "MBPX2X33n");
+
+    // 4 note
+    m_AutoCommand.addOption("MBPX2X1X34n", "MBPX2X1X34n");
 
     SmartDashboard.putData("Alliance Team", m_Alliance);
     SmartDashboard.putData("Auto Path", m_AutoCommand);
+    SmartDashboard.putData("PATHPLANNER", m_pathPlanner);
+  }
+
+  public void configurePathPlannerCommand(UpperSub s_Upper) {
+    NamedCommands.registerCommand("GROUND", new AutoUpper(s_Upper, UpperState.GROUND));
+    NamedCommands.registerCommand("SPEAKER", new AutoUpper(s_Upper, UpperState.BASE));
+    NamedCommands.registerCommand("SHOOT", new AutoUpper(s_Upper, UpperState.SHOOT));
   }
 
   @Override
@@ -88,51 +113,94 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     robotConstants.mode = "AUTO";
-    if(alliance == "RED") {
-      switch(command){
-        // 1 note
-        case "LBP1nrb":
-          m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
-          break;
-        case "MBP1nrb":
-          m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
-          break;
-        case "RBP1nrb":
-          m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
-          break;
+    switch(alliance){
+      case "RED":
+        switch(command){
+          // 1 note
+          case "LBP1nrb":
+            m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
+            break;
+          case "MBP1nrb":
+            m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
+            break;
+          case "RBP1nrb":
+            m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
+            break;
 
-        default:
-          m_autonomousCommand = null;
-          break;
-      }
-    } else if(alliance == "BLUE") {
-      switch(command){
-        // 1 note
-        case "LBP1nrb":
-          m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
-          break;
-        case "MBP1nrb":
-          m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
-          break;
-        case "RBP1nrb":
-          m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
-          break;
+          // 2 notes
+          case "MBPX12n":
+            m_autonomousCommand = new Autos().MidX1Base_2n(m_Swerve, m_upper);
+            break;
+          case "MBPX22n":
+            m_autonomousCommand = new Autos().MidX2Base_2n(m_Swerve, m_upper);
+            break;
+          case "MBPX32n":
+            m_autonomousCommand = new Autos().MidX3Base_2n(m_Swerve, m_upper);
+            break;
 
-        // 2 note
-        case "MBPX22nb":
-          m_autonomousCommand = new Autos().MidX2Base_b2n(m_Swerve, m_upper, m_vision);
-          break;
+          // 3 note
+          case "MBPX2X13n":
+            m_autonomousCommand = new Autos().MidX2BaseX1Base_3n(m_Swerve, m_upper);
+            break;
+          case "MBPX2X33n":
+            m_autonomousCommand = new Autos().MidX2BaseX3Base_3n(m_Swerve, m_upper);
+            break;
 
-        // 3 note
-        case "MBPX2X13nb":
-          m_autonomousCommand = new Autos().MidX2BaseX1Base_b3n(m_Swerve, m_upper, m_vision);
-          break;
-        
-        default:
-          m_autonomousCommand = null;
-          break;
-      }
-    }
+          // 4 note
+          case "MBPX2X1X34n":
+            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper);
+            break;
+
+          default:
+            m_autonomousCommand = null;
+            break;
+        }
+        break;
+      case "BLUE":
+        switch(command){
+          // 1 note
+          case "LBP1nrb":
+            m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
+            break;
+          case "MBP1nrb":
+            m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
+            break;
+          case "RBP1nrb":
+            m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
+            break;
+
+          // 2 note
+          case "MBPX12n":
+            m_autonomousCommand = new Autos().MidX1Base_2n(m_Swerve, m_upper);
+            break;
+          case "MBPX22n":
+            m_autonomousCommand = new Autos().MidX2Base_2n(m_Swerve, m_upper);
+            break;
+          case "MBPX32n":
+            m_autonomousCommand = new Autos().MidX3Base_2n(m_Swerve, m_upper);
+            break;    
+
+          // 3 note
+          case "MBPX2X13n":
+            m_autonomousCommand = new Autos().MidX2BaseX1Base_3n(m_Swerve, m_upper);
+            break;
+          case "MBPX2X33n":
+            m_autonomousCommand = new Autos().MidX2BaseX3Base_3n(m_Swerve, m_upper);
+            break;
+
+          // 4 note
+          case "MBPX2X1X34n":
+            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper);
+            break;
+          
+          default:
+            m_autonomousCommand = null;
+            break;
+        }
+        break;
+      case "PATHPLANNER":
+        m_autonomousCommand = m_pathPlanner.getSelected();
+    } 
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
