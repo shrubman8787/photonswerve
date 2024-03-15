@@ -40,6 +40,7 @@ public final class Constants {
     FAR,
     TRANSPORT,
     FLIGHT,
+    MGROUND,
     SHOOT,
     TRAP,
     NULL,
@@ -200,6 +201,7 @@ public final class Constants {
     public static final int elbowCancoderID = 19;
     public static final int intakeMotorID = 22;
 
+    public static final double elbowCancoderOffset = 0.0057;
     public static final double shooter_arm_Angle = 135;
 
     public static final double elbowKP = 10;
@@ -219,7 +221,7 @@ public final class Constants {
     public static final double ELBOW_AMP_POS = 0.037109; // 1.0.012939 2.-0.002197
     public static final double ELBOW_BASE_POS = -0.2;
     public static final double ELBOW_FAR_POS = -0.185;
-    public static final double ELBOW_TRANSPORT_POS = -0.070312; // need to test
+    public static final double ELBOW_TRANSPORT_POS = -0.140312; // need to test
     public static final double ELBOW_TRAP_POS = -0.226328;
     public static final double ELBOW_PREENDGAME_POS = 0.075;
 
@@ -244,15 +246,15 @@ public final class Constants {
     // global
     public static final double shootingTime = 0.5;
     public static final double intakeTime = 3;
-    public static final double holdTime = 3;
+    public static final double holdTime = 2;
 
     // left speaker
-    public static final double leftSpeakerOffset = 30;
+    public static final double leftSpeakerOffset = 60;
 
     // mid speaker
     public static final double midSpeakerOffset = 0;
 
-    // right speaker
-    public static final double rightSpeakerOffset = -30;
+    // right speakerd
+    public static final double rightSpeakerOffset = -60;
   }
 }

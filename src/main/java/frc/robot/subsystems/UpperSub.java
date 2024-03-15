@@ -70,7 +70,7 @@ public class UpperSub extends SubsystemBase{
 
     // elbow
     public double getElbowRotation() {
-        return elbowCancoder.getPosition().getValue();
+        return (elbowCancoder.getPosition().getValue() + UpperConstants.elbowCancoderOffset);
     }
 
     public void setElbow(double speed) {

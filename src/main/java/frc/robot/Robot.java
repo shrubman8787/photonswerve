@@ -4,20 +4,13 @@
 
 package frc.robot;
 
-import java.util.function.Supplier;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.UpperState;
 import frc.robot.Constants.robotConstants;
-import frc.robot.commands.AutoUpper;
 import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TeleopUpper;
@@ -39,29 +32,28 @@ public class Robot extends TimedRobot {
 
   public static String alliance;
   private String command;
+  private int delay;
 
   SendableChooser<String> m_Alliance = new SendableChooser<>();
   SendableChooser<String> m_AutoCommand = new SendableChooser<>();
-  SendableChooser<Command> m_pathPlanner = new SendableChooser<>();
+  SendableChooser<Integer> m_Delay = new SendableChooser<>();
 
   @Override
   public void robotInit() {
     
-    configurePathPlannerCommand(m_upper);
-    
     m_Alliance.setDefaultOption("RED", "RED");
     m_Alliance.addOption("BLUE", "BLUE");
-    m_Alliance.addOption("PATHPLANNER", "PATHPLANNER");
 
-    m_pathPlanner = AutoBuilder.buildAutoChooser("PathPlanner");
+    // left=L mid=M right=R base=B red=r blue=b   combination -> initial pos(L,M,B)+base or not(B or N)+preload and note place or only leave(PXaYb or PL,(a=1,2,3... , b=1,2,3...))+how many notes(xn, x=1, 2, 3...)+red or blue(r,b)
+    // 0 note
+    m_AutoCommand.setDefaultOption("OURAUTOISFUCKED", "OURAUTOISFUCKED");
 
-    m_pathPlanner.setDefaultOption("", m_autonomousCommand);
-
-    // left=L mid=M right=R base=B red=r blue=b   combination -> initial pos(L,M,B)+base or not(B or N)+preload and note place(PXaYb,(a=1,2,3... , b=1,2,3...))+how many notes(xn, x=1, 2, 3...)+red or blue(r,b)
     // 1 note
-    m_AutoCommand.setDefaultOption("LBP1nrb", "LBP1nrb");
-    m_AutoCommand.addOption("MBP1nrb", "MBP1nrb");
-    m_AutoCommand.addOption("RBP1nrb", "RBP1nrb");
+    m_AutoCommand.addOption("LBP1n", "LBP1n");
+    m_AutoCommand.addOption("MBP1n", "MBP1n");
+    m_AutoCommand.addOption("RBP1n", "RBP1n");
+    m_AutoCommand.addOption("LBPL1n", "LBPL1n");
+    m_AutoCommand.addOption("RBPL1n", "RBPL1n");
 
     // 2 note
     m_AutoCommand.addOption("MBPX12n", "MBPX12n");
@@ -75,24 +67,19 @@ public class Robot extends TimedRobot {
     // 4 note
     m_AutoCommand.addOption("MBPX2X1X34n", "MBPX2X1X34n");
 
+    m_Delay.setDefaultOption("0", 0);
+    for(int i=1;i<=15;i++) m_Delay.addOption("" + i, i);
+
     SmartDashboard.putData("Alliance Team", m_Alliance);
     SmartDashboard.putData("Auto Path", m_AutoCommand);
-    SmartDashboard.putData("PATHPLANNER", m_pathPlanner);
-  }
-
-  public void configurePathPlannerCommand(UpperSub s_Upper) {
-    NamedCommands.registerCommand("GROUND", new AutoUpper(s_Upper, UpperState.GROUND));
-    NamedCommands.registerCommand("SPEAKER", new AutoUpper(s_Upper, UpperState.BASE));
-    NamedCommands.registerCommand("SHOOT", new AutoUpper(s_Upper, UpperState.SHOOT));
+    SmartDashboard.putData("Auto Delay", m_Delay);
   }
 
   @Override
   public void robotPeriodic() {
     alliance = m_Alliance.getSelected();
     command = m_AutoCommand.getSelected();
-    // X = m_X.getSelected();
-    // Y = m_Y.getSelected();
-    // Z = m_Z.getSelected();
+    delay = m_Delay.getSelected();
 
     CommandScheduler.getInstance().run();
   }
@@ -116,15 +103,26 @@ public class Robot extends TimedRobot {
     switch(alliance){
       case "RED":
         switch(command){
+          // 0 note
+          case "OURAUTOISFUCKED":
+            m_autonomousCommand = null;
+            break;
+
           // 1 note
-          case "LBP1nrb":
+          case "LBP1n":
             m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
             break;
-          case "MBP1nrb":
+          case "MBP1n":
             m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
             break;
-          case "RBP1nrb":
+          case "RBP1n":
             m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
+            break;
+          case "LBPL1n":
+            m_autonomousCommand = new Autos().LeftLeave_r1n(m_Swerve, m_upper, delay);
+            break;
+          case "RBPL1n":
+            m_autonomousCommand = new Autos().RightLeave_r1n(m_Swerve, m_upper, delay);
             break;
 
           // 2 notes
@@ -146,27 +144,34 @@ public class Robot extends TimedRobot {
             m_autonomousCommand = new Autos().MidX2BaseX3Base_3n(m_Swerve, m_upper);
             break;
 
-          // 4 note
+          // 4 note 0=left 1=right
           case "MBPX2X1X34n":
-            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper);
-            break;
-
-          default:
-            m_autonomousCommand = null;
+            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper, alliance, delay);
             break;
         }
         break;
       case "BLUE":
         switch(command){
+          // 0 note
+          case "OURAUTOISFUCKED":
+            m_autonomousCommand = null;
+            break;
+
           // 1 note
-          case "LBP1nrb":
+          case "LBP1n":
             m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
             break;
-          case "MBP1nrb":
+          case "MBP1n":
             m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
             break;
-          case "RBP1nrb":
+          case "RBP1n":
             m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
+            break;
+          case "LBPL1n":
+            m_autonomousCommand = new Autos().LeftLeave_b1n(m_Swerve, m_upper, delay);
+            break;
+          case "RBPL1n":
+            m_autonomousCommand = new Autos().RightLeave_b1n(m_Swerve, m_upper, delay);
             break;
 
           // 2 note
@@ -190,16 +195,10 @@ public class Robot extends TimedRobot {
 
           // 4 note
           case "MBPX2X1X34n":
-            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper);
-            break;
-          
-          default:
-            m_autonomousCommand = null;
+            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper, alliance, delay);
             break;
         }
         break;
-      case "PATHPLANNER":
-        m_autonomousCommand = m_pathPlanner.getSelected();
     } 
 
     if (m_autonomousCommand != null) {
@@ -221,7 +220,6 @@ public class Robot extends TimedRobot {
     }
     m_Swerve.setDefaultCommand(teleopSwerve);
     m_upper.setDefaultCommand(teleopUpper);
-    m_vision.setDefaultCommand(null);
   }
 
   @Override

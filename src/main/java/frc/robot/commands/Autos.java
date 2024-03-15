@@ -1,10 +1,12 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.UpperState;
+import frc.robot.Constants.robotConstants;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.UpperSub;
 
@@ -15,21 +17,24 @@ public class Autos {
         return new SequentialCommandGroup(
             new AutoResetEverything(s_Swerve, FieldConstants.leftSpeakerOffset),
             new AutoUpper(s_Upper, UpperState.BASE),
-            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, 0.5, false)
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT)
         );
     }
     public SequentialCommandGroup Mid_1n(Swerve s_Swerve, UpperSub s_Upper) {
         return new SequentialCommandGroup(
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
             new AutoUpper(s_Upper, UpperState.BASE),
-            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, 0.5, false)
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT)
         );
     }
     public SequentialCommandGroup Right_1n(Swerve s_Swerve, UpperSub s_Upper) {
         return new SequentialCommandGroup(
             new AutoResetEverything(s_Swerve, FieldConstants.rightSpeakerOffset),
             new AutoUpper(s_Upper, UpperState.BASE),
-            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, 0.5, false)
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT)
         );
     }
 
@@ -37,6 +42,7 @@ public class Autos {
     public SequentialCommandGroup MidX1Base_2n(Swerve s_Swerve, UpperSub s_Upper) { // this is where the problem occurs
         return new SequentialCommandGroup(
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
             new AutoUpper(s_Upper, UpperState.BASE),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             new ParallelRaceGroup(
@@ -47,8 +53,9 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.15, -0.2, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT),
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
         );
     }
@@ -56,6 +63,7 @@ public class Autos {
     public SequentialCommandGroup MidX2Base_2n(Swerve s_Swerve, UpperSub s_Upper) {
         return new SequentialCommandGroup(
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
             new AutoUpper(s_Upper, UpperState.BASE),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             new ParallelRaceGroup(
@@ -69,8 +77,9 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.15, 0, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT),
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
         );
     }
@@ -78,6 +87,7 @@ public class Autos {
     public SequentialCommandGroup MidX3Base_2n(Swerve s_Swerve, UpperSub s_Upper) {
         return new SequentialCommandGroup(
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
             new AutoUpper(s_Upper, UpperState.BASE),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             new ParallelRaceGroup(
@@ -88,8 +98,9 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.175, 0, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT),
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
         );
     }
@@ -99,6 +110,7 @@ public class Autos {
         return new SequentialCommandGroup(
             // To X2 Then Back
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
             new AutoUpper(s_Upper, UpperState.BASE),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             new ParallelRaceGroup(
@@ -112,7 +124,7 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.3, 0.05, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             // To X1 Then Back
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
@@ -124,9 +136,9 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.15, 0.125, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
-            new AutoUpper(s_Upper, UpperConstants.ELBOW_DEFAULT_POS, 0, 0, 2, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT),
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
         );
     }
@@ -135,6 +147,7 @@ public class Autos {
         return new SequentialCommandGroup(
             // To X2 Then Back
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
             new AutoUpper(s_Upper, UpperState.BASE),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             new ParallelRaceGroup(
@@ -148,7 +161,7 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.3, 0.05, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             // To X3 Then Back
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
@@ -160,18 +173,19 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.15, 0.125, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
-            new AutoUpper(s_Upper, UpperConstants.ELBOW_DEFAULT_POS, 0, 0, 2, false),
+            new AutoUpper(s_Upper, UpperState.DEFAULT),
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
         );
     }
 
     /* 4 note */
-    public SequentialCommandGroup MidX2BaseX1BaseX3Base_4n(Swerve s_Swerve, UpperSub s_Upper) {
+    public SequentialCommandGroup MidX2BaseX1BaseX3Base_4n(Swerve s_Swerve, UpperSub s_Upper, String alliance, int delay) {
         return new SequentialCommandGroup(
             // To X2 Then Back
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
             new AutoUpper(s_Upper, UpperState.BASE),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             new ParallelRaceGroup(
@@ -185,7 +199,7 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.3, 0.05, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             // To X1 Then Back
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
@@ -197,7 +211,7 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.15, 0.125, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
-            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
             // To X3 Then Back
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
@@ -209,9 +223,75 @@ public class Autos {
                 new AutoSwerve(s_Swerve, 0.15, 0, 0),
                 new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.holdTime, false)
             ),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_HOLD_SPEED, FieldConstants.shootingTime, false),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            // leave
+            new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset),
+            new ParallelCommandGroup(
+                new AutoSwerve(s_Swerve, -2, alliance == "RED" ? delay == 0 ? -3.5 : 0.85 : delay == 0 ? -0.85 : 3.5, 0, 0, 0),
+                new AutoUpper(s_Upper, UpperState.DEFAULT)
+            )
+        );
+    }
+
+    /* leaving */
+    // z is turning left = positive now
+    public SequentialCommandGroup LeftLeave_r1n(Swerve s_Swerve, UpperSub s_Upper, int delaySeconds) {
+        return new SequentialCommandGroup(
+            new AutoResetEverything(s_Swerve, FieldConstants.leftSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
             new AutoUpper(s_Upper, UpperState.BASE),
             new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
-            new AutoUpper(s_Upper, UpperConstants.ELBOW_DEFAULT_POS, 0, 0, 2, false),
+            new CustomizedDelay(delaySeconds),
+            new ParallelCommandGroup(
+                new AutoSwerve(s_Swerve, -2, -3.5, 0, 0, 0),
+                new AutoUpper(s_Upper, UpperState.DEFAULT)
+            ),
+            new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
+        );
+    }
+
+    public SequentialCommandGroup RightLeave_r1n(Swerve s_Swerve, UpperSub s_Upper, int delaySeconds) {
+        return new SequentialCommandGroup(
+            new AutoResetEverything(s_Swerve, FieldConstants.rightSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
+            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new CustomizedDelay(delaySeconds),
+            new ParallelCommandGroup(
+                new AutoSwerve(s_Swerve, -2, 0.85, 0, 0, 0),
+                new AutoUpper(s_Upper, UpperState.DEFAULT)
+            ),
+            new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
+        );
+    }
+
+    public SequentialCommandGroup LeftLeave_b1n(Swerve s_Swerve, UpperSub s_Upper, int delaySeconds) {
+        return new SequentialCommandGroup(
+            new AutoResetEverything(s_Swerve, FieldConstants.leftSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
+            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new CustomizedDelay(delaySeconds),
+            new ParallelCommandGroup(
+                new AutoSwerve(s_Swerve, -2, -0.85, 0, 0, 0),
+                new AutoUpper(s_Upper, UpperState.DEFAULT)
+            ),
+            new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
+        );
+    }
+
+    public SequentialCommandGroup RightLeave_b1n(Swerve s_Swerve, UpperSub s_Upper, int delaySeconds) {
+        return new SequentialCommandGroup(
+            new AutoResetEverything(s_Swerve, FieldConstants.leftSpeakerOffset),
+            new AutoResetWheels(s_Swerve),
+            new AutoUpper(s_Upper, UpperState.BASE),
+            new AutoUpper(s_Upper, UpperConstants.ELBOW_BASE_POS, UpperConstants.SHOOTER_SHOOT_SPEED, UpperConstants.INTAKE_SHOOT_SPEED, FieldConstants.shootingTime, false),
+            new CustomizedDelay(delaySeconds),
+            new ParallelCommandGroup(
+                new AutoSwerve(s_Swerve, -2, 3.5, 0, 0, 0),
+                new AutoUpper(s_Upper, UpperState.DEFAULT)
+            ),
             new AutoResetEverything(s_Swerve, FieldConstants.midSpeakerOffset)
         );
     }

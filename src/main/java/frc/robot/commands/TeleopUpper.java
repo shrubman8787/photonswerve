@@ -51,8 +51,10 @@ public class TeleopUpper extends Command{
         if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.FAR ? UpperState.DEFAULT : UpperState.FAR; endGaming = false;
         if(controller.getLeftBumperPressed()) Constants.state = Constants.state == UpperState.TRANSPORT ? UpperState.DEFAULT : UpperState.TRANSPORT; endGaming = false;
         if(controller.getRightBumperPressed()) Constants.state = Constants.state == UpperState.FLIGHT ? UpperState.FLIGHT : UpperState.FLIGHT; endGaming = false;
-        if(controller.getRightTriggerAxis() > 0.01) Constants.state = UpperState.SHOOT; endGaming = false;
-        if(controller.getRightTriggerAxis() < 0.01 && Constants.state == UpperState.SHOOT) Constants.state = UpperState.NULL;
+        if(controller.getRightTriggerAxis() > 0.05) Constants.state = UpperState.SHOOT; endGaming = false;
+        if(controller.getRightTriggerAxis() < 0.05 && Constants.state == UpperState.SHOOT) Constants.state = UpperState.NULL;
+        if(controller.getLeftTriggerAxis() > 0.05) Constants.state = UpperState.MGROUND; endGaming = false;
+        if(controller.getLeftTriggerAxis() < 0.05 && Constants.state == UpperState.MGROUND) Constants.state = UpperState.DEFAULT; endGaming = false;
         if(controller.getStartButtonPressed() && oneTime == false) {
             counter = counter==2 ? 0 : counter+1;
             oneTime = true;
@@ -85,6 +87,12 @@ public class TeleopUpper extends Command{
                 if(s_Upper.hasNote()) s_Upper.setLED(12,41,235);
                 else s_Upper.blink(12,41,235);
                 if(s_Upper.hasNote()) Constants.state = UpperState.DEFAULT;
+                break;
+            case MGROUND:
+                elbowAngle = UpperConstants.ELBOW_GROUND_POS;
+                intakeSpeed = UpperConstants.INTAKE_GROUND_SPEED;
+                shooterSpeed = UpperConstants.SHOOTER_GROUND_SPEED;
+                s_Upper.blink(255, 255, 255);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
                 break;
             case AMP:
                 elbowAngle = UpperConstants.ELBOW_AMP_POS;

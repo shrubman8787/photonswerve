@@ -6,10 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,11 +15,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.robotConstants;
 
 public class Swerve extends SubsystemBase {
@@ -51,30 +45,6 @@ public class Swerve extends SubsystemBase {
         new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
         new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
       };
-
-    AutoBuilder.configureHolonomic(
-      this::getPose, 
-      this::resetPose, 
-      this::getCurrentSpeeds, 
-      this::driveRobotRelative, 
-      new HolonomicPathFollowerConfig(
-        new PIDConstants(
-          SwerveConstants.driveKP, 
-          SwerveConstants.driveKI, 
-          SwerveConstants.driveKD), 
-        new PIDConstants(
-          SwerveConstants.angleKP, 
-          SwerveConstants.angleKI, 
-          SwerveConstants.angleKD), 
-          SwerveConstants.maxSpeed, 
-          SwerveConstants.driveBaseRaius, 
-          new ReplanningConfig()), 
-          ()->{
-            var alliance = DriverStation.getAlliance();
-            if(alliance.isPresent()) return alliance.get() == DriverStation.Alliance.Red;
-            return false;
-          }, 
-          this);
   }
 
   public static SwerveModulePosition[] pos = {
