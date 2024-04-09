@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,13 +25,13 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final Swerve m_Swerve = new Swerve();
-  private final UpperSub m_upper = new UpperSub();
+  private final UpperSub m_Upper = new UpperSub();
   private final VisionSub m_vision = new VisionSub();
 
   private final XboxController driverController = new XboxController(robotConstants.DriverControllerID);
 
   private final TeleopSwerve teleopSwerve = new TeleopSwerve(m_Swerve, m_vision, driverController);
-  private final TeleopUpper teleopUpper = new TeleopUpper(m_upper, driverController);
+  private final TeleopUpper teleopUpper = new TeleopUpper(m_Upper, driverController);
 
   public static String alliance;
   private String command;
@@ -91,7 +94,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_upper.charge(255, 0, 0, (driverController.getLeftY() + driverController.getRightY()));
+    m_Upper.gayPride();
+    m_Swerve.zeroGyro();
+    m_Swerve.resetPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+    m_Swerve.drive(new Translation2d(0.0001, 0), 0, true, true);
   }
 
   @Override
@@ -110,43 +116,43 @@ public class Robot extends TimedRobot {
 
           // 1 note
           case "LBP1n":
-            m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_Upper);
             break;
           case "MBP1n":
-            m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_Upper);
             break;
           case "RBP1n":
-            m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_Upper);
             break;
           case "LBPL1n":
-            m_autonomousCommand = new Autos().LeftLeave_r1n(m_Swerve, m_upper, delay);
+            m_autonomousCommand = new Autos().LeftLeave_r1n(m_Swerve, m_Upper, delay);
             break;
           case "RBPL1n":
-            m_autonomousCommand = new Autos().RightLeave_r1n(m_Swerve, m_upper, delay);
+            m_autonomousCommand = new Autos().RightLeave_r1n(m_Swerve, m_Upper, delay);
             break;
 
           // 2 notes
           case "MBPX12n":
-            m_autonomousCommand = new Autos().MidX1Base_2n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX1Base_2n(m_Swerve, m_Upper);
             break;
           case "MBPX22n":
-            m_autonomousCommand = new Autos().MidX2Base_2n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX2Base_2n(m_Swerve, m_Upper);
             break;
           case "MBPX32n":
-            m_autonomousCommand = new Autos().MidX3Base_2n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX3Base_2n(m_Swerve, m_Upper);
             break;
 
           // 3 note
           case "MBPX2X13n":
-            m_autonomousCommand = new Autos().MidX2BaseX1Base_3n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX2BaseX1Base_3n(m_Swerve, m_Upper, alliance, delay);
             break;
           case "MBPX2X33n":
-            m_autonomousCommand = new Autos().MidX2BaseX3Base_3n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX2BaseX3Base_3n(m_Swerve, m_Upper, alliance, delay);
             break;
 
           // 4 note 0=left 1=right
           case "MBPX2X1X34n":
-            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper, alliance, delay);
+            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_Upper, alliance, delay);
             break;
         }
         break;
@@ -159,43 +165,43 @@ public class Robot extends TimedRobot {
 
           // 1 note
           case "LBP1n":
-            m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().Left_1n(m_Swerve, m_Upper);
             break;
           case "MBP1n":
-            m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().Mid_1n(m_Swerve, m_Upper);
             break;
           case "RBP1n":
-            m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().Right_1n(m_Swerve, m_Upper);
             break;
           case "LBPL1n":
-            m_autonomousCommand = new Autos().LeftLeave_b1n(m_Swerve, m_upper, delay);
+            m_autonomousCommand = new Autos().LeftLeave_b1n(m_Swerve, m_Upper, delay);
             break;
           case "RBPL1n":
-            m_autonomousCommand = new Autos().RightLeave_b1n(m_Swerve, m_upper, delay);
+            m_autonomousCommand = new Autos().RightLeave_b1n(m_Swerve, m_Upper, delay);
             break;
 
           // 2 note
           case "MBPX12n":
-            m_autonomousCommand = new Autos().MidX1Base_2n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX1Base_2n(m_Swerve, m_Upper);
             break;
           case "MBPX22n":
-            m_autonomousCommand = new Autos().MidX2Base_2n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX2Base_2n(m_Swerve, m_Upper);
             break;
           case "MBPX32n":
-            m_autonomousCommand = new Autos().MidX3Base_2n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX3Base_2n(m_Swerve, m_Upper);
             break;    
 
           // 3 note
           case "MBPX2X13n":
-            m_autonomousCommand = new Autos().MidX2BaseX1Base_3n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX2BaseX1Base_3n(m_Swerve, m_Upper, alliance, delay);
             break;
           case "MBPX2X33n":
-            m_autonomousCommand = new Autos().MidX2BaseX3Base_3n(m_Swerve, m_upper);
+            m_autonomousCommand = new Autos().MidX2BaseX3Base_3n(m_Swerve, m_Upper, alliance, delay);
             break;
 
           // 4 note
           case "MBPX2X1X34n":
-            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_upper, alliance, delay);
+            m_autonomousCommand = new Autos().MidX2BaseX1BaseX3Base_4n(m_Swerve, m_Upper, alliance, delay);
             break;
         }
         break;
@@ -219,7 +225,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_Swerve.setDefaultCommand(teleopSwerve);
-    m_upper.setDefaultCommand(teleopUpper);
+    m_Upper.setDefaultCommand(teleopUpper);
   }
 
   @Override

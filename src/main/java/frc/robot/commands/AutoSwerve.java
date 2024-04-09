@@ -51,7 +51,7 @@ public class AutoSwerve extends Command{
             if(oneTimeY==true) Y = xyPID.calculate(y - swerve.getPose().getY());
             else oneTimeY = true; Y = xyPID.calculate(y - swerve.getPose().getY());
         }else Y = 0;
-        trans2d = new Translation2d(X*0.8, Y*0.8);
+        trans2d = new Translation2d(X, Y);
         rotate2d =  -zPID.calculate(z - swerve.getPose().getRotation().getRotations());
         swerve.drive(trans2d, rotate2d, true, false);
     }
