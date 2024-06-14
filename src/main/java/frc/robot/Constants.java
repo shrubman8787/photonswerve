@@ -27,7 +27,7 @@ import frc.lib.config.SwerveModuleConstants;
 public final class Constants {
 
   public static final class robotConstants {
-    public static final String canbusName = "GTX7130";
+    public static final String canbusName = "LETHIMCOOK";
     public static final int DriverControllerID = 0;
     public static String mode = "DISABLED";
   }
@@ -51,7 +51,7 @@ public final class Constants {
 
   public static final class SwerveConstants {
     public static final double axisDeadBand = 0.05; // make sure ur robot won't vibrate cuz the joystick gives a input like 0.002 or sth
-    public static final int pigeon1 = 13; // advanced gyro
+    public static final int pigeon1 = 1; // advanced gyro
     public static final int pigeon2 = 14;
     public static final int pigeon3 = 15;
     public static final int pigeon4 = 16;
@@ -134,36 +134,36 @@ public final class Constants {
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class Mod0 {
-      public static final int driveMotorID = 10;
-      public static final int angleMotorID = 11;
-      public static final int canCoderID = 3;
+      public static final int driveMotorID = 1;
+      public static final int angleMotorID = 2;
+      public static final int canCoderID = 0;
       public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.291016);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Front Right Module - Module 1 */
     public static final class Mod1 {
-      public static final int driveMotorID = 7;
-      public static final int angleMotorID = 8;
-      public static final int canCoderID = 6;
+      public static final int driveMotorID = 11;
+      public static final int angleMotorID = 12;
+      public static final int canCoderID = 1;
       public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.167236);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Rear Left Module - Module 2 */
     public static final class Mod2 {
-      public static final int driveMotorID = 4;
-      public static final int angleMotorID = 5;
-      public static final int canCoderID = 9;
+      public static final int driveMotorID = 21;
+      public static final int angleMotorID = 22;
+      public static final int canCoderID = 2;
       public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.690918);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
     
     /* Rear Right Module - Module 3 */
     public static final class Mod3 {
-      public static final int driveMotorID = 1;
-      public static final int angleMotorID = 2;
-      public static final int canCoderID = 12;
+      public static final int driveMotorID = 31;
+      public static final int angleMotorID = 32;
+      public static final int canCoderID = 3;
       public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.113281);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -195,10 +195,10 @@ public final class Constants {
 
     public static final int leftElbowMotorID = 17;
     public static final int rightElbowMotorID = 18;
-    public static final int leftShooterMotorID = 21;
-    public static final int rightShooterMotorID = 20;
-    public static final int elbowCancoderID = 19;
-    public static final int intakeMotorID = 22;
+    public static final int leftShooterMotorID = 41;
+    public static final int rightShooterMotorID = 42;
+    public static final int elbowCancoderID = 4;
+    public static final int intakeMotorID = 43;
 
     public static final double elbowCancoderOffset = -0.00709;
     public static final double shooter_arm_Angle = 135;
@@ -216,18 +216,18 @@ public final class Constants {
     public static final double shooteriLimit = 0.0; // test
 
     // 3/15 -0.01279(upper movement)
-    public static final double ELBOW_DEFAULT_POS = -0.103102; // -0.014987
-    public static final double ELBOW_GROUND_POS = -0.2425;
-    public static final double ELBOW_FLIGHT_POS = -0.235;
-    public static final double ELBOW_AMP_POS = 0.024319; // 1.0.012939 2.-0.002197
-    public static final double ELBOW_BASE_POS = -0.21279;
-    public static final double ELBOW_FAR_POS = -0.19779;
-    public static final double ELBOW_TRAP_POS = -0.2;
+    public static final double ELBOW_DEFAULT_POS = -0.120504; // -0.014987
+    public static final double ELBOW_GROUND_POS = -0.245098;//-0.2425 -0.017402
+    public static final double ELBOW_FLIGHT_POS = -0.251402;
+    public static final double ELBOW_AMP_POS = 0.006917; // 1.0.012939 2.-0.002197
+    public static final double ELBOW_BASE_POS = -0.230192;
+    public static final double ELBOW_FAR_POS = -0.037181;
+    public static final double ELBOW_TRAP_POS = -0.217;
     public static final double ELBOW_PREENDGAME_POS = 0.06221;
 
     public static final double INTAKE_HOLD_SPEED = 0;
-    public static final double INTAKE_GROUND_SPEED = 0.35;
-    public static final double INTAKE_SHOOT_SPEED = 1;
+    public static final double INTAKE_GROUND_SPEED = -0.45;
+    public static final double INTAKE_SHOOT_SPEED = -1;
 
     public static final double SHOOTER_GROUND_SPEED = 0.03;
     public static final double SHOOTER_TRAP_SPEED = -0.35;

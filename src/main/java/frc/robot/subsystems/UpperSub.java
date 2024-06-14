@@ -15,13 +15,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.ChenryLib.MathUtility;
+import frc.robot.Constants;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.robotConstants;
 
 public class UpperSub extends SubsystemBase{
         
-    private final TalonFX leftElbow = new TalonFX(UpperConstants.leftElbowMotorID);
-    private final TalonFX rightElbow = new TalonFX(UpperConstants.rightElbowMotorID);
+    private final TalonFX leftElbow = new TalonFX(UpperConstants.leftElbowMotorID, Constants.robotConstants.canbusName);
+    private final TalonFX rightElbow = new TalonFX(UpperConstants.rightElbowMotorID, Constants.robotConstants.canbusName);
     
     private final CANSparkMax leftShooter = new CANSparkMax(UpperConstants.leftShooterMotorID, MotorType.kBrushless);
     private final CANSparkMax rightShooter = new CANSparkMax(UpperConstants.rightShooterMotorID, MotorType.kBrushless);
@@ -240,6 +241,7 @@ public class UpperSub extends SubsystemBase{
     // limitSwitch
     public boolean hasNote() {
         return (leftLimitSwitch.get() || rightLimitSwitch.get());
+        
     }
 
     @Override

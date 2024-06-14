@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
     delay = m_Delay.getSelected();
 
     CommandScheduler.getInstance().run();
+    
   }
 
   @Override

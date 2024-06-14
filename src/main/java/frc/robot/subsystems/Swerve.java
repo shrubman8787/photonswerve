@@ -22,18 +22,18 @@ import frc.robot.Constants.robotConstants;
 
 public class Swerve extends SubsystemBase {
   private final Pigeon2 gyro1;
-  private final Pigeon2 gyro2;
-  private final Pigeon2 gyro3;
-  private final Pigeon2 gyro4;
+  // private final Pigeon2 gyro2;
+  // private final Pigeon2 gyro3;
+  // private final Pigeon2 gyro4;
 
   private SwerveDriveOdometry swerveOdometry;
   public SwerveModule[] mSwerveMods;
 
   public Swerve() {
     gyro1 = new Pigeon2(Constants.SwerveConstants.pigeon1, robotConstants.canbusName);
-    gyro2 = new Pigeon2(Constants.SwerveConstants.pigeon2, robotConstants.canbusName);
-    gyro3 = new Pigeon2(Constants.SwerveConstants.pigeon3, robotConstants.canbusName);
-    gyro4 = new Pigeon2(Constants.SwerveConstants.pigeon4, robotConstants.canbusName);
+    // gyro2 = new Pigeon2(Constants.SwerveConstants.pigeon2, robotConstants.canbusName);
+    // gyro3 = new Pigeon2(Constants.SwerveConstants.pigeon3, robotConstants.canbusName);
+    // gyro4 = new Pigeon2(Constants.SwerveConstants.pigeon4, robotConstants.canbusName);
     zeroGyro();
 
     swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.swerveKinematics, getYaw(), pos);
@@ -116,24 +116,24 @@ public class Swerve extends SubsystemBase {
 
   public void zeroGyro() {
     gyro1.setYaw(0);
-    gyro2.setYaw(0);
-    gyro3.setYaw(0);
-    gyro4.setYaw(0);
+    // gyro2.setYaw(0);
+    // gyro3.setYaw(0);
+    // gyro4.setYaw(0);
   }
 
   public void setGyro(double pos) {
     gyro1.setYaw(pos);
-    gyro2.setYaw(pos);
-    gyro3.setYaw(pos);
-    gyro4.setYaw(pos);
+    // gyro2.setYaw(pos);
+    // gyro3.setYaw(pos);
+    // gyro4.setYaw(pos);
   }
 
   public Rotation2d getYaw(){
     StatusSignal<Double> gyro1Yaw = gyro1.getYaw();
-    StatusSignal<Double> gyro2Yaw = gyro2.getYaw();
-    StatusSignal<Double> gyro3Yaw = gyro3.getYaw();
-    StatusSignal<Double> gyro4Yaw = gyro4.getYaw();
-    double averageAngle = (gyro1Yaw.getValue() + gyro2Yaw.getValue() + gyro3Yaw.getValue() + gyro4Yaw.getValue()) / 4;
+    // StatusSignal<Double> gyro2Yaw = gyro2.getYaw();
+    // StatusSignal<Double> gyro3Yaw = gyro3.getYaw();
+    // StatusSignal<Double> gyro4Yaw = gyro4.getYaw();
+    double averageAngle = gyro1Yaw.getValue() ;
     return (Constants.SwerveConstants.invertGyro) ? Rotation2d.fromDegrees(360 - averageAngle) : Rotation2d.fromDegrees(averageAngle);
   } 
 
