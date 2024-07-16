@@ -39,16 +39,17 @@ public class TeleopUpper extends Command{
     @Override
     public void initialize() {
         Constants.state = UpperState.DEFAULT;
+        elbowAngle = UpperConstants.ELBOW_DEFAULT_POS;
     }
 
     @Override
     public void execute() {
 
         // auto-aiming temporarily not using
-        if(controller.getYButtonPressed()) Constants.state = Constants.state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND; endGaming = false;
-        if(controller.getXButtonPressed()) Constants.state = Constants.state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP; endGaming = false;
-        if(controller.getAButtonPressed()) Constants.state = Constants.state == UpperState.BASE ? UpperState.DEFAULT : UpperState.BASE; endGaming = false;
-        if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.FAR ? UpperState.DEFAULT : UpperState.FAR; endGaming = false;
+        // if(controller.getYButtonPressed()) Constants.state = Constants.state == UpperState.GROUND ? UpperState.DEFAULT : UpperState.GROUND; endGaming = false;
+        // if(controller.getXButtonPressed()) Constants.state = Constants.state == UpperState.AMP ? UpperState.DEFAULT : UpperState.AMP; endGaming = false;
+        // if(controller.getAButtonPressed()) Constants.state = Constants.state == UpperState.BASE ? UpperState.DEFAULT : UpperState.BASE; endGaming = false;
+        // if(controller.getBButtonPressed()) Constants.state = Constants.state == UpperState.FAR ? UpperState.DEFAULT : UpperState.FAR; endGaming = false;
         if(controller.getRightBumperPressed()) Constants.state = Constants.state == UpperState.FLIGHT ? UpperState.DEFAULT : UpperState.FLIGHT; endGaming = false;
         if(controller.getRightTriggerAxis() > 0.05) Constants.state = UpperState.SHOOT; endGaming = false;
         if(controller.getRightTriggerAxis() < 0.05 && Constants.state == UpperState.SHOOT) Constants.state = UpperState.NULL;
@@ -57,7 +58,8 @@ public class TeleopUpper extends Command{
         if(controller.getStartButtonPressed() && oneTime == false) {
             counter = counter==2 ? 0 : counter+1;
             oneTime = true;
-            endGaming = true;
+            endGaming =
+             true;
         }
         if(controller.getStartButtonReleased()) oneTime = false;
 
@@ -73,87 +75,97 @@ public class TeleopUpper extends Command{
 
         switch (Constants.state) {
             case DEFAULT:
-                elbowAngle = UpperConstants.ELBOW_DEFAULT_POS;
+                
                 intakeSpeed = 0;
                 shooterSpeed = 0;
                 if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(232, 213, 245);
                 else s_Upper.charge(255, 0, 0, false);
+                if(controller.getXButtonPressed()){elbowAngle+=0.002;}
+                if (controller.getBButtonPressed()) {elbowAngle-=0.002;}
                 break;  
-            case GROUND:
-                elbowAngle = UpperConstants.ELBOW_GROUND_POS;
-                intakeSpeed = s_Upper.hasNote() ? 0: UpperConstants.INTAKE_GROUND_SPEED;
-                shooterSpeed = UpperConstants.SHOOTER_GROUND_SPEED;
-                if(s_Upper.hasNote()) s_Upper.setLED(12,41,235);
-                else s_Upper.blink(12,41,235);
-                if(s_Upper.hasNote()) Constants.state = UpperState.DEFAULT;
-                break;
-            case MGROUND:
-                elbowAngle = UpperConstants.ELBOW_GROUND_POS;
-                intakeSpeed = UpperConstants.INTAKE_GROUND_SPEED;
-                shooterSpeed = UpperConstants.SHOOTER_GROUND_SPEED;
-                s_Upper.blink(255, 255, 255);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-                break;
-            case AMP:
-                elbowAngle = UpperConstants.ELBOW_AMP_POS;
-                intakeSpeed = 0;
-                shooterSpeed = 0;
-                s_Upper.setLED(255, 255, 0);
-                break;
-            case BASE:
-                elbowAngle = UpperConstants.ELBOW_BASE_POS;
-                intakeSpeed = 0;
-                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
-                else s_Upper.charge(255,0,0, false);
-                break;
-            case FAR:
-                elbowAngle = UpperConstants.ELBOW_FAR_POS;
-                intakeSpeed = 0;
-                shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
-                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
-                else s_Upper.charge(255,0,0, false);
-                break;
-            case FLIGHT:
-                elbowAngle = UpperConstants.ELBOW_FLIGHT_POS;
-                intakeSpeed = 0;
-                shooterSpeed = 0;
-                s_Upper.setLED(255, 255, 255);
-                break;
-            case TRAP:
-                elbowAngle = UpperConstants.ELBOW_TRAP_POS;
-                intakeSpeed = 0;
-                shooterSpeed = UpperConstants.SHOOTER_TRAP_SPEED;
-                if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
-                else s_Upper.charge(255, 0, 0, true);
-                break;
-            case SHOOT:
-                intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
-                shooterSpeed = isTrap ? UpperConstants.SHOOTER_TRAP_SPEED : UpperConstants.SHOOTER_SHOOT_SPEED;
-                s_Upper.blink(0,255,0);
-                break;
-            case NULL:
-                shooterSpeed = 0;
-                intakeSpeed = 0;
-                if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(100, 200, 200);
-                else s_Upper.charge(255, 0, 0, false);
-                break;
-            case PREENDGAME:
-                elbowAngle = UpperConstants.ELBOW_PREENDGAME_POS;
-                shooterSpeed = 0;
-                intakeSpeed = 0;
-                s_Upper.setLED(87, 169, 254);
-                break;
-            case ENDGAME:
-                elbowAngle = UpperConstants.ELBOW_GROUND_POS;
-                intakeSpeed = 0;
-                shooterSpeed = 0;
-                s_Upper.setLED(87, 169, 254);
-                break;
+            // case GROUND:
+            //     elbowAngle = UpperConstants.ELBOW_GROUND_POS;
+            //     intakeSpeed = s_Upper.hasNote() ? 0: UpperConstants.INTAKE_GROUND_SPEED;
+            //     shooterSpeed = UpperConstants.SHOOTER_GROUND_SPEED;
+            //     if(s_Upper.hasNote()) s_Upper.setLED(12,41,235);
+            //     else s_Upper.blink(12,41,235);
+            //     if(s_Upper.hasNote()) Constants.state = UpperState.DEFAULT;
+            //     break;
+            // case MGROUND:
+            //     elbowAngle = UpperConstants.ELBOW_GROUND_POS;
+            //     intakeSpeed = UpperConstants.INTAKE_GROUND_SPEED;
+            //     shooterSpeed = UpperConstants.SHOOTER_GROUND_SPEED;
+            //     s_Upper.blink(255, 255, 255);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+            //     break;
+            // case AMP:
+            //     elbowAngle = UpperConstants.ELBOW_AMP_POS;
+            //     intakeSpeed = 0;
+            //     shooterSpeed = 0;
+            //     s_Upper.setLED(255, 255, 0);
+            //     break;
+            // case BASE:
+            //     elbowAngle = UpperConstants.ELBOW_BASE_POS;
+            //     intakeSpeed = 0;
+            //     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+            //     if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
+            //     else s_Upper.charge(255,0,0, false);
+            //     break;
+            // case FAR:
+            //     elbowAngle = UpperConstants.ELBOW_FAR_POS;
+            //     intakeSpeed = 0;
+            //     shooterSpeed = UpperConstants.SHOOTER_SHOOT_SPEED;
+            //     if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0,255,0);
+            //     else s_Upper.charge(255,0,0, false);
+            //     break;
+            // case FLIGHT:
+            //     elbowAngle = UpperConstants.ELBOW_FLIGHT_POS;
+            //     intakeSpeed = 0;
+            //     shooterSpeed = 0;
+            //     s_Upper.setLED(255, 255, 255);
+            //     break;
+            // case TRAP:
+            //     elbowAngle = UpperConstants.ELBOW_TRAP_POS;
+            //     intakeSpeed = 0;
+            //     shooterSpeed = UpperConstants.SHOOTER_TRAP_SPEED;
+            //     if(Math.abs(s_Upper.getShooterRPM()) > UpperConstants.SHOOTER_LEGAL_SPEED) s_Upper.setLED(0, 255, 0);
+            //     else s_Upper.charge(255, 0, 0, true);
+            //     break;
+            // case SHOOT:
+            //     intakeSpeed = UpperConstants.INTAKE_SHOOT_SPEED;
+            //     shooterSpeed = isTrap ? UpperConstants.SHOOTER_TRAP_SPEED : UpperConstants.SHOOTER_SHOOT_SPEED;
+            //     s_Upper.blink(0,255,0);
+            //     break;
+            // case NULL:
+            //     shooterSpeed = 0;
+            //     intakeSpeed = 0;
+            //     if(Math.abs(s_Upper.getShooterRPM()) <= 25) s_Upper.marquee(100, 200, 200);
+            //     else s_Upper.charge(255, 0, 0, false);
+            //     break;
+            // case PREENDGAME:
+            //     elbowAngle = UpperConstants.ELBOW_PREENDGAME_POS;
+            //     shooterSpeed = 0;
+            //     intakeSpeed = 0;
+            //     s_Upper.setLED(87, 169, 254);
+            //     break;
+            // case ENDGAME:
+            //     elbowAngle = UpperConstants.ELBOW_GROUND_POS;
+            //     intakeSpeed = 0;
+            //     shooterSpeed = 0;
+            //     s_Upper.setLED(87, 169, 254);
+            //     break;
         }
 
+        // SmartDashboard.putNumber("elbow target", -elbowPID.calculate(elbowAngle - s_Upper.getElbowRotation()));
         s_Upper.setElbow(-elbowPID.calculate(elbowAngle - s_Upper.getElbowRotation()));
         s_Upper.setShooter(shooterSpeed);
         s_Upper.setIntake(intakeSpeed);
+        if (controller.getRightTriggerAxis()>=0.01) {
+            s_Upper.setIntake(Constants.UpperConstants.INTAKE_GROUND_SPEED);
+        }
+        if (controller.getLeftTriggerAxis()>=0.01) {
+            s_Upper.setShooter(Constants.UpperConstants.SHOOTER_SHOOT_SPEED);
+        }
+        
 
         SmartDashboard.putString("UpperState", Constants.state.toString());
     }

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.robotConstants;
+import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.Autos;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TeleopUpper;
@@ -30,8 +31,9 @@ public class Robot extends TimedRobot {
 
   private final XboxController driverController = new XboxController(robotConstants.DriverControllerID);
 
-  private final TeleopSwerve teleopSwerve = new TeleopSwerve(m_Swerve, m_vision, driverController);
+  private final TeleopSwerve teleopSwerve = new TeleopSwerve(m_Swerve, driverController);
   private final TeleopUpper teleopUpper = new TeleopUpper(m_Upper, driverController);
+  private final AimbotSwerve aimbotSwerve = new AimbotSwerve(m_Swerve, m_vision, driverController);
 
   public static String alliance;
   private String command;
@@ -40,6 +42,10 @@ public class Robot extends TimedRobot {
   SendableChooser<String> m_Alliance = new SendableChooser<>();
   SendableChooser<String> m_AutoCommand = new SendableChooser<>();
   SendableChooser<Integer> m_Delay = new SendableChooser<>();
+
+  public Robot () {
+    super(0.05);
+  }
 
   @Override
   public void robotInit() {
@@ -225,7 +231,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_Swerve.setDefaultCommand(teleopSwerve);
+    m_Swerve.setDefaultCommand(aimbotSwerve);
     m_Upper.setDefaultCommand(teleopUpper);
   }
 

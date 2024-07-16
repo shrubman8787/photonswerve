@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -50,7 +51,7 @@ public final class Constants {
   public static UpperState state;
 
   public static final class SwerveConstants {
-    public static final double axisDeadBand = 0.05; // make sure ur robot won't vibrate cuz the joystick gives a input like 0.002 or sth
+    public static final double axisDeadBand = 0.02; // make sure ur robot won't vibrate cuz the joystick gives a input like 0.002 or sth
     public static final int pigeon1 = 1; // advanced gyro
     public static final int pigeon2 = 14;
     public static final int pigeon3 = 15;
@@ -231,7 +232,7 @@ public final class Constants {
 
     public static final double SHOOTER_GROUND_SPEED = 0.03;
     public static final double SHOOTER_TRAP_SPEED = -0.35;
-    public static final double SHOOTER_SHOOT_SPEED = -1;
+    public static final double SHOOTER_SHOOT_SPEED = -0.85;
     public static final double SHOOTER_HOLD_SPEED = 0;
     public static final double SHOOTER_LEGAL_SPEED = 5000;
 
@@ -256,5 +257,23 @@ public final class Constants {
 
     // right speakerd
     public static final double rightSpeakerOffset = 90;
+  }
+
+  public static final class LimeLight {
+    public static final double KPDefault = 0.017;
+    public static final double KIDefault = 0.0;
+    public static final double KDDefault = 0.01;
+    public static final double WindupDefault = 0;
+    public static final double LimitDefault = 0;
+    public static final double SmoothDefault = 0.75;
+
+    public static final String KPKey = "kp";
+    public static final String KIKey = "ki";
+    public static final String KDKey = "kd";
+    public static final String WindupKey = "wind";
+    public static final String LimKey = "lim";
+    public static final String SmoothKey = "smooth";
+
+    
   }
 }
