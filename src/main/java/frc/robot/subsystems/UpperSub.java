@@ -19,6 +19,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.robotConstants;
 
+
 public class UpperSub extends SubsystemBase{
         
     private final TalonFX leftElbow = new TalonFX(UpperConstants.leftElbowMotorID, Constants.robotConstants.canbusName);
@@ -119,6 +120,111 @@ public class UpperSub extends SubsystemBase{
         leftShooter.set(speed);
         rightShooter.set(speed); // brute force attack
     }
+
+    
+
+    // public double Predict(double tz) {
+    
+    //     double[] tzKnownValues = {2.25, 2.5, 3, 3.35, 3.5, 3.75, 4};
+    //     double[] degKnownValues = {-0.1789, -0.1655, -0.1574, -0.1543, -0.1496, -0.1482, -0.1438};
+
+    //     // Fit a polynomial of degree 2
+    //     double[] coefficients = polyfit(tzKnownValues, degKnownValues, 2);
+
+    //     // Example input
+    //     double tzInput = tz;
+    //     double degOutput = polynomial(coefficients, tzInput);
+
+    //     return degOutput;
+    // }
+    
+
+    // public static double[] polyfit(double[] x, double[] y, int degree) {
+    //     int n = x.length;
+    //     double[][] matrix = new double[degree + 1][degree + 2];
+
+    //     for (int i = 0; i <= degree; i++) {
+    //         for (int j = 0; j <= degree; j++) {
+    //             matrix[i][j] = 0;
+    //             for (int k = 0; k < n; k++) {
+    //                 matrix[i][j] += Math.pow(x[k], i + j);
+    //             }
+    //         }
+    //     }
+
+    //     double[] rhs = new double[degree + 1];
+    //     for (int i = 0; i <= degree; i++) {
+    //         rhs[i] = 0;
+    //         for (int k = 0; k < n; k++) {
+    //             rhs[i] += y[k] * Math.pow(x[k], i);
+    //         }
+    //     }
+
+    //     for (int i = 0; i <= degree; i++) {
+    //         matrix[i][degree + 1] = rhs[i];
+    //     }
+
+    //     return gaussianElimination(matrix);
+    // }
+
+    // public static double[] gaussianElimination(double[][] matrix) {
+    //     int n = matrix.length;
+
+    //     for (int i = 0; i < n; i++) {
+    //         int max = i;
+    //         for (int j = i + 1; j < n; j++) {
+    //             if (Math.abs(matrix[j][i]) > Math.abs(matrix[max][i])) {
+    //                 max = j;
+    //             }
+    //         }
+
+    //         double[] temp = matrix[i];
+    //         matrix[i] = matrix[max];
+    //         matrix[max] = temp;
+
+    //         for (int j = i + 1; j < n; j++) {
+    //             double factor = matrix[j][i] / matrix[i][i];
+    //             for (int k = i; k <= n; k++) {
+    //                 matrix[j][k] -= factor * matrix[i][k];
+    //             }
+    //         }
+    //     }
+
+    //     double[] result = new double[n];
+    //     for (int i = n - 1; i >= 0; i--) {
+    //         result[i] = matrix[i][n] / matrix[i][i];
+    //         for (int j = i - 1; j >= 0; j--) {
+    //             matrix[j][n] -= matrix[j][i] * result[i];
+    //         }
+    //     }
+
+    //     return result;
+    // }
+
+    // public static double polynomial(double[] coefficients, double x) {
+    //     double result = 0;
+    //     for (int i = 0; i < coefficients.length; i++) {
+    //         result += coefficients[i] * Math.pow(x, i);
+    //     }
+    //     return result;
+    // }
+
+    // public double Predict() {
+    //     double[] tzKnownValues = {2.25, 2.5, 3, 3.35, 3.5, 3.75, 4};
+    //     double[] degKnownValues = {-0.1789, -0.1655, -0.1574, -0.1543, -0.1496, -0.1482, -0.1438};
+
+    //     // Create the design matrix for polynomial regression (degree 2)
+    //     double[][] designMatrix = new double[tzKnownValues.length][3];
+    //     for (int i = 0; i < tzKnownValues.length; i++) {
+    //         designMatrix[i][0] = 1;  // Intercept term
+    //         designMatrix[i][1] = tzKnownValues[i];
+    //         designMatrix[i][2] = tzKnownValues[i] * tzKnownValues[i];
+    //     }
+
+        
+    // }
+
+    
 
     // LED
     public void setLED(int r, int g, int b) {

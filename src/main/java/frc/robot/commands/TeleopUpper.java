@@ -8,10 +8,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.UpperConstants;
 import frc.robot.Constants.UpperState;
 import frc.robot.subsystems.UpperSub;
+import frc.robot.subsystems.VisionSub;
 
 public class TeleopUpper extends Command{
 
     private final UpperSub s_Upper;
+    private final VisionSub s_Vision;
     private final XboxController controller;
     
     private double elbowAngle;
@@ -30,10 +32,12 @@ public class TeleopUpper extends Command{
         UpperConstants.elbowiLimit
     );
 
-    public TeleopUpper(UpperSub upper, XboxController controller) {
+    public TeleopUpper(UpperSub upper,VisionSub vision, XboxController controller) {
         this.s_Upper = upper;
+        this.s_Vision = vision;
         this.controller = controller;
         addRequirements(upper);
+        addRequirements(vision);
     }
 
     @Override
@@ -156,6 +160,7 @@ public class TeleopUpper extends Command{
         }
 
         // SmartDashboard.putNumber("elbow target", -elbowPID.calculate(elbowAngle - s_Upper.getElbowRotation()));
+        // if (controller.getAButtonPressed()) {s_Upper.setElbow(-elbowPID.calculate(elbowAngle - s_Upper.getElbowRotation()));}
         s_Upper.setElbow(-elbowPID.calculate(elbowAngle - s_Upper.getElbowRotation()));
         s_Upper.setShooter(shooterSpeed);
         s_Upper.setIntake(intakeSpeed);
@@ -168,6 +173,7 @@ public class TeleopUpper extends Command{
         
 
         SmartDashboard.putString("UpperState", Constants.state.toString());
+        // SmartDashboard.putNumber("predict", s_Upper.Predict(s_Vision.getTz()));
     }
 
     @Override

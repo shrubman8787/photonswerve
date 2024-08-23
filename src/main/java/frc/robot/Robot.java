@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   private final XboxController driverController = new XboxController(robotConstants.DriverControllerID);
 
   private final TeleopSwerve teleopSwerve = new TeleopSwerve(m_Swerve, driverController);
-  private final TeleopUpper teleopUpper = new TeleopUpper(m_Upper, driverController);
+  private final TeleopUpper teleopUpper = new TeleopUpper(m_Upper, m_vision, driverController);
   private final AimbotSwerve aimbotSwerve = new AimbotSwerve(m_Swerve, m_vision, driverController);
 
   public static String alliance;

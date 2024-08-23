@@ -260,7 +260,7 @@ public final class Constants {
   }
 
   public static final class LimeLight {
-    public static final double KPDefault = 0.017;
+    public static final double KPDefault = 0.0017;
     public static final double KIDefault = 0.0;
     public static final double KDDefault = 0.01;
     public static final double WindupDefault = 0;

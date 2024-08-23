@@ -1,11 +1,16 @@
 package frc.robot.commands;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.common.hardware.VisionLEDMode;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -41,12 +46,16 @@ public class AimbotSwerve extends Command {
   public double Smooth = Constants.LimeLight.SmoothDefault;
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  private NetworkTableEntry tx = table.getEntry("tx");
-  private NetworkTableEntry ty = table.getEntry("ty");
-  private NetworkTableEntry tpcs = table.getEntry("targetpose_cameraspace");
   
   private PID facingPID = new PID(KP, KI, KD, WindUp, Limit);
-  
+
+  // Constants such as camera and target height stored. Change per robot and goal!
+  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(8);
+  final double TARGET_HEIGHT_METERS = Units.inchesToMeters(54);
+  // Angle between horizontal and the camera.
+  final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(60);
+  //chage the name accordingly
+  PhotonCamera camera = new PhotonCamera("photonvision");
 
   public AimbotSwerve(Swerve s_Swerve,VisionSub s_Vision, XboxController controller) {
     this.s_Swerve = s_Swerve;
@@ -58,27 +67,11 @@ public class AimbotSwerve extends Command {
 
   @Override
   public void execute() {
+    SmartDashboard.putNumber("speed", rotationVal);
 
-    
+    var vision = camera.getLatestResult();
 
-    Preferences.initDouble(LimeLight.KPKey, KP);
-    Preferences.initDouble(LimeLight.KIKey, KI);
-    Preferences.initDouble(LimeLight.KDKey, KD);
-    Preferences.initDouble(LimeLight.WindupKey, WindUp);
-    Preferences.initDouble(LimeLight.LimKey, Limit);
-    Preferences.initDouble(LimeLight.SmoothKey, Smooth);
-
-    KP = Preferences.getDouble(LimeLight.KPKey, KP);
-    KI = Preferences.getDouble(LimeLight.KIKey, KI);
-    KD = Preferences.getDouble(LimeLight.KDKey, KD);
-    WindUp = Preferences.getDouble(LimeLight.WindupKey, WindUp);
-    Limit = Preferences.getDouble(LimeLight.LimKey, Limit);
-    Smooth = Preferences.getDouble(LimeLight.SmoothKey, Smooth);
-
-    SmartDashboard.putNumber("tx", tx.getDouble(0.0));
-        SmartDashboard.putNumber("ty", ty.getDouble(0.0));
-        SmartDashboard.putNumber("tz", tpcs.getDoubleArray(new double[6])[2]);
-        SmartDashboard.putNumber("speed", rotationVal);
+    camera.setLED(VisionLEDMode.kBlink);
     
     /* Get Values, Deadband */
     translationVal = translationLimiter.calculate(
@@ -96,9 +89,18 @@ public class AimbotSwerve extends Command {
     // }
 
     // rotationVal = facingPID.calculate(tx.getDouble(0.0));
+    double range =PhotonUtils.calculateDistanceToTargetMeters(
+                      CAMERA_HEIGHT_METERS,
+                      TARGET_HEIGHT_METERS,
+                      CAMERA_PITCH_RADIANS,
+                      Units.degreesToRadians(vision.getBestTarget().getPitch()));
 
-    ema = Smooth*facingPID.calculate(tx.getDouble(0.0))+(1-Smooth)*ema;
-    rotationVal = ema;
+    SmartDashboard.putNumber("range", range);
+
+
+    ema = Smooth*facingPID.calculate(vision.getBestTarget().getYaw())+(1-Smooth)*ema;
+    // rotationVal = ema;
+    SmartDashboard.putNumber("output", ema);
 
     if (driver.getBackButton()) {
       s_Swerve.zeroGyro(); 

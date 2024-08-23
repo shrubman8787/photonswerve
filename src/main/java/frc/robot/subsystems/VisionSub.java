@@ -23,10 +23,15 @@ public class VisionSub extends SubsystemBase{ //  using now
     private final NetworkTableEntry tx = table.getEntry("tx");
     private final NetworkTableEntry ty = table.getEntry("ty");
     private final NetworkTableEntry tpcs = table.getEntry("targetpose_cameraspace");
+    private final NetworkTableEntry tv = table.getEntry("tv");
 
-    
+    public double getTz() {
+        return tpcs.getDoubleArray(new double[6])[2];
+    }
 
-    
+    public double getTx() {
+        return tx.getDouble(0.0);
+    }
 
     
 
